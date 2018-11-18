@@ -38,5 +38,13 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/map"/>
 
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/citation"
+        android:src="@drawable/citation_lot_map"
+        app:layout_constraintBottom_toBottomOf="@id/navigation"
+        android:paddingVertical="225dp"
+        android:paddingHorizontal="80dp"
+        android:background="@null"/>
 </android.support.constraint.ConstraintLayout>

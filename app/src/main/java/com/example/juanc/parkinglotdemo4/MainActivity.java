@@ -8,11 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private ImageView mImageView;
+    private ImageView citationLot;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -23,11 +25,20 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     mTextMessage.setText(R.string.title_ride);
                     mTextMessage.setTextSize(20);
-                    mImageView.setVisibility(View.INVISIBLE);
+                    mImageView.setVisibility(View.GONE);
+                    citationLot.setVisibility(View.GONE);
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setVisibility(View.GONE);
                     mImageView.setVisibility(View.VISIBLE);
+                    citationLot.setVisibility(View.VISIBLE);
+                    citationLot.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getBaseContext(), "This is my Toast message!",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
                     return true;
             }
             return false;
@@ -42,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = findViewById(R.id.message);
         mImageView = findViewById(R.id.map);
         mImageView.setVisibility(View.INVISIBLE);
+        citationLot = findViewById(R.id.citation);
+        citationLot.setVisibility(View.INVISIBLE);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }

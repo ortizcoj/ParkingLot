@@ -1,5 +1,6 @@
 package com.example.juanc.parkinglotdemo4;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,9 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class Menu extends AppCompatActivity {
 
     private TextView mTextMessage;
     private ImageView mImageView;
@@ -35,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
                     citationLot.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getBaseContext(), "This is my Toast message!",
-                                    Toast.LENGTH_LONG).show();
+                            //TODO here is where there is going to be an error
+                            Intent intent = new Intent(getApplicationContext(), LotDisplay.class);
+                            startActivity(intent);
                         }
                     });
                     return true;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.menu_layout);
 
         mTextMessage = findViewById(R.id.message);
         mImageView = findViewById(R.id.map);

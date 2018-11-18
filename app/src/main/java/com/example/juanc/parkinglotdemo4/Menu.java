@@ -35,7 +35,6 @@ public class Menu extends AppCompatActivity {
                     citationLot.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO here is where there is going to be an error
                             Intent intent = new Intent(getApplicationContext(), LotDisplay.class);
                             startActivity(intent);
                         }

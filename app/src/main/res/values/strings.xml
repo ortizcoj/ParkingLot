@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Eagle Ride</string>
+    <string name="app_name">EagleRide</string>
     <string name="title_ride">Ride</string>
     <string name="title_map">Map</string>
     <string name="action_settings">Settings</string>

@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class Register extends AppCompatActivity {
 
     private TextView mTextMessage;
     private TextView email;

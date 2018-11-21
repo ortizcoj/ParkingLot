@@ -30,36 +30,47 @@ public class Menu extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    emailED.setVisibility(View.VISIBLE);
-                    emailTV.setVisibility(View.VISIBLE);
-                    passwordED.setVisibility(View.VISIBLE);
-                    passwordTV.setVisibility(View.VISIBLE);
-                    login.setVisibility(View.VISIBLE);
-                    register.setVisibility(View.VISIBLE);
-                    mImageView.setVisibility(View.GONE);
-                    citationLot.setVisibility(View.GONE);
-                    return true;
+                    return setUpRideMainUI();
                 case R.id.navigation_dashboard:
-                    emailED.setVisibility(View.GONE);
-                    emailTV.setVisibility(View.GONE);
-                    passwordED.setVisibility(View.GONE);
-                    passwordTV.setVisibility(View.GONE);
-                    login.setVisibility(View.GONE);
-                    register.setVisibility(View.GONE);
-                    mImageView.setVisibility(View.VISIBLE);
-                    citationLot.setVisibility(View.VISIBLE);
-                    citationLot.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getApplicationContext(), LotDisplay.class);
-                            startActivity(intent);
-                        }
-                    });
-                    return true;
+                    return setUpMapMainUI();
             }
             return false;
         }
     };
+
+    private boolean setUpMapMainUI() {
+        emailED.setVisibility(View.GONE);
+        emailTV.setVisibility(View.GONE);
+        passwordED.setVisibility(View.GONE);
+        passwordTV.setVisibility(View.GONE);
+        login.setVisibility(View.GONE);
+        register.setVisibility(View.GONE);
+        mImageView.setVisibility(View.VISIBLE);
+        citationLot.setVisibility(View.VISIBLE);
+        citationLot.setX(200);
+        citationLot.setY(850);
+        citationLot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LotDisplay.class);
+                startActivity(intent);
+            }
+        });
+        return true;
+    }
+
+    private boolean setUpRideMainUI() {
+        emailED.setVisibility(View.VISIBLE);
+        emailTV.setVisibility(View.VISIBLE);
+        passwordED.setVisibility(View.VISIBLE);
+        passwordTV.setVisibility(View.VISIBLE);
+        login.setVisibility(View.VISIBLE);
+        register.setVisibility(View.VISIBLE);
+        register.setX(50);
+        mImageView.setVisibility(View.GONE);
+        citationLot.setVisibility(View.GONE);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +87,7 @@ public class Menu extends AppCompatActivity {
         passwordTV = findViewById(R.id.passwordTV);
         login = findViewById(R.id.loginButton);
         register = findViewById(R.id.registerButton);
+        register.setX(50);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }

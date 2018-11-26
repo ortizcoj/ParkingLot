@@ -15,7 +15,9 @@
         android:scaleType="centerInside"
         android:id="@+id/map"
         android:orientation="horizontal"
-        android:background="@drawable/parkingmap"></LinearLayout>
+        android:background="@drawable/parkingmap">
+
+    </LinearLayout>
 
     <com.example.juanc.parkinglotdemo4.Spot
         android:layout_width="wrap_content"

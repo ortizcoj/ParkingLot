@@ -67,6 +67,13 @@ public class Menu extends AppCompatActivity {
         login.setVisibility(View.VISIBLE);
         register.setVisibility(View.VISIBLE);
         register.setX(50);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Register.class);
+                startActivity(intent);
+            }
+        });
         mImageView.setVisibility(View.GONE);
         citationLot.setVisibility(View.GONE);
         return true;
@@ -88,6 +95,13 @@ public class Menu extends AppCompatActivity {
         login = findViewById(R.id.loginButton);
         register = findViewById(R.id.registerButton);
         register.setX(50);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Register.class);
+                startActivity(intent);
+            }
+        });
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }

@@ -93,6 +93,13 @@ public class Menu extends AppCompatActivity {
         passwordED = findViewById(R.id.passwordET);
         passwordTV = findViewById(R.id.passwordTV);
         login = findViewById(R.id.loginButton);
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
+                startActivity(intent);
+            }
+        });
         register = findViewById(R.id.registerButton);
         register.setX(50);
         register.setOnClickListener(new View.OnClickListener() {

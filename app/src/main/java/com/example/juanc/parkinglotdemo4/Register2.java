@@ -13,18 +13,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Register extends AppCompatActivity {
+public class Register2 extends AppCompatActivity {
 
     private ImageView mImageView;
     private ImageView citationLot;
-    private TextView email;
-    private TextView password;
-    private TextView confirmPassword;
+    private TextView name;
+    private TextView brand;
+    private TextView model;
+    private TextView color;
     private TextView registerText;
-    private Button nextButton;
-    private EditText emailField;
-    private EditText passwordField;
-    private EditText confirmPasswordField;
+    private Button registerButton;
+    private EditText nameET;
+    private EditText brandET;
+    private EditText modelET;
+    private EditText colorET;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -42,13 +44,15 @@ public class Register extends AppCompatActivity {
     };
 
     private boolean setUpMapMainUI() {
-        emailField.setVisibility(View.GONE);
-        email.setVisibility(View.GONE);
-        passwordField.setVisibility(View.GONE);
-        password.setVisibility(View.GONE);
-        confirmPassword.setVisibility(View.GONE);
-        confirmPasswordField.setVisibility(View.GONE);
-        nextButton.setVisibility(View.GONE);
+        name.setVisibility(View.GONE);
+        nameET.setVisibility(View.GONE);
+        brand.setVisibility(View.GONE);
+        brandET.setVisibility(View.GONE);
+        model.setVisibility(View.GONE);
+        modelET.setVisibility(View.GONE);
+        color.setVisibility(View.GONE);
+        colorET.setVisibility(View.GONE);
+        registerButton.setVisibility(View.GONE);
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
         citationLot.setX(200);
@@ -64,20 +68,20 @@ public class Register extends AppCompatActivity {
     }
 
     private boolean setUpRideMainUI() {
-        emailField.setVisibility(View.VISIBLE);
-        email.setVisibility(View.VISIBLE);
-        passwordField.setVisibility(View.VISIBLE);
-        password.setVisibility(View.VISIBLE);
-        confirmPassword.setVisibility(View.VISIBLE);
-        confirmPasswordField.setVisibility(View.VISIBLE);
-        nextButton.setVisibility(View.VISIBLE);
-        nextButton.setX(50);
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        name.setVisibility(View.VISIBLE);
+        nameET.setVisibility(View.VISIBLE);
+        brand.setVisibility(View.VISIBLE);
+        brandET.setVisibility(View.VISIBLE);
+        model.setVisibility(View.VISIBLE);
+        modelET.setVisibility(View.VISIBLE);
+        color.setVisibility(View.VISIBLE);
+        colorET.setVisibility(View.VISIBLE);
+        registerButton.setVisibility(View.VISIBLE);
+        registerButton.setX(50);
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Register2.class);
-                intent.putExtra("Email", emailField.getText().toString());
-                intent.putExtra("Password", passwordField.getText().toString());
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(intent);
             }
         });
@@ -90,7 +94,7 @@ public class Register extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register_layout);
+        setContentView(R.layout.register_2_layout);
 
         mImageView = findViewById(R.id.map);
         mImageView.setVisibility(View.INVISIBLE);
@@ -98,20 +102,20 @@ public class Register extends AppCompatActivity {
         citationLot.setVisibility(View.INVISIBLE);
         registerText = findViewById(R.id.register);
         registerText.setTypeface(null, Typeface.BOLD);
-        email = findViewById(R.id.emailTV);
-        password = findViewById(R.id.passwordTV);
-        confirmPassword = findViewById(R.id.confirmPasswordTV);
-        nextButton = findViewById(R.id.registerButton);
-        emailField = findViewById(R.id.email);
-        passwordField = findViewById(R.id.passwordET);
-        confirmPasswordField = findViewById(R.id.confirmPasswordET);
-        nextButton.setX(50);
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        name = findViewById(R.id.nameTV);
+        nameET = findViewById(R.id.name);
+        brand = findViewById(R.id.brandTV);
+        brandET = findViewById(R.id.brandET);
+        model = findViewById(R.id.modelTV);
+        modelET = findViewById(R.id.modelET);
+        color = findViewById(R.id.colorTV);
+        colorET = findViewById(R.id.colorET);
+        registerButton = findViewById(R.id.registerButton);
+        registerButton.setX(50);
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Register2.class);
-                intent.putExtra("Email", emailField.getText().toString());
-                intent.putExtra("Password", passwordField.getText().toString());
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(intent);
             }
         });

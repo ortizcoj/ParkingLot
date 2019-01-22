@@ -26,71 +26,90 @@
         android:text="@string/register"
         android:textSize="16pt"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="20dp"
+        android:layout_margin="17dp"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
 
     <TextView
-        android:id="@+id/emailTV"
+        android:id="@+id/nameTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/email"
+        android:text="@string/name"
         android:textSize="12pt"
         app:layout_constraintTop_toBottomOf="@id/register"
-        android:layout_margin="20dp"
+        android:layout_margin="17dp"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/email"
-        app:layout_constraintTop_toBottomOf="@id/emailTV"
-        android:layout_margin="20dp"
+        android:id="@+id/name"
+        app:layout_constraintTop_toBottomOf="@id/nameTV"
+        android:layout_margin="17dp"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
 
     <TextView
-        android:id="@+id/passwordTV"
+        android:id="@+id/brandTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/password"
+        android:text="@string/brand"
         android:textSize="12pt"
-        app:layout_constraintTop_toBottomOf="@id/email"
-        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        android:layout_margin="17dp"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
 
     <EditText
-        android:id="@+id/passwordET"
+        android:id="@+id/brandET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/passwordTV"
-        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/brandTV"
+        android:layout_margin="17dp"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
     <TextView
 
-        android:id="@+id/confirmPasswordTV"
+        android:id="@+id/modelTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/confirm_password"
+        android:text="@string/model"
         android:textSize="12pt"
-        app:layout_constraintTop_toBottomOf="@id/passwordET"
-        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/brandET"
+        android:layout_margin="17dp"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
 
     <EditText
-        android:id="@+id/confirmPasswordET"
+        android:id="@+id/modelET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/confirmPasswordTV"
-        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/modelTV"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <TextView
+
+        android:id="@+id/colorTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/color"
+        android:textSize="12pt"
+        app:layout_constraintTop_toBottomOf="@id/modelET"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <EditText
+        android:id="@+id/colorET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/colorTV"
+        android:layout_margin="17dp"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
 
@@ -98,9 +117,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/registerButton"
-        android:text="@string/next"
-        app:layout_constraintTop_toBottomOf="@id/confirmPasswordET"
-        android:layout_margin="20dp"
+        android:text="@string/register"
+        app:layout_constraintTop_toBottomOf="@id/colorET"
+        android:layout_margin="17dp"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
 

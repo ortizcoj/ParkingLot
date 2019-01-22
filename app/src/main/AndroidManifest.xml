@@ -27,6 +27,9 @@
         <activity android:name=".RiderDriverRequest"
             android:label="EagleRide">
         </activity>
+        <activity android:name=".Register2"
+            android:label="EagleRide">
+        </activity>
 
 
     </application>

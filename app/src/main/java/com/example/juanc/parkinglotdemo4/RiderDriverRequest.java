@@ -1,26 +1,28 @@
 package com.example.juanc.parkinglotdemo4;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
-
-import java.sql.Time;
 
 public class RiderDriverRequest extends AppCompatActivity {
 
@@ -30,15 +32,20 @@ public class RiderDriverRequest extends AppCompatActivity {
     private TextView dropoff;
     private TextView pickup;
     private Switch requestSwitch;
-    private Spinner timeDropDown;
     private Spinner dropoffDropDown;
     private Spinner pickupDropDown;
     private Button next;
     private ImageView mImageView;
     private ImageView citationLot;
-    int[] times;
-    private boolean isUserInteracting;
     private ProgressBar pb;
+    private Button firstTimeButton;
+    private Button secondTimeButton;
+    private int pickupHourEarly;
+    private int pickupMinEarly;
+    private int pickupHourLate;
+    private int pickupMinLate;
+    private TextView and;
+
 
     //TODO add a profile selectable icon
 
@@ -64,12 +71,15 @@ public class RiderDriverRequest extends AppCompatActivity {
         dropoff.setVisibility(View.GONE);
         pickup.setVisibility(View.GONE);
         requestSwitch.setVisibility(View.GONE);
-        timeDropDown.setVisibility(View.GONE);
         dropoffDropDown.setVisibility(View.GONE);
         pickupDropDown.setVisibility(View.GONE);
+        and.setVisibility(View.GONE);
         next.setVisibility(View.GONE);
+        firstTimeButton.setVisibility(View.GONE);
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
+        firstTimeButton.setVisibility(View.GONE);
+        secondTimeButton.setVisibility(View.GONE);
         citationLot.setX(200);
         citationLot.setY(850);
         citationLot.setOnClickListener(new View.OnClickListener() {
@@ -86,9 +96,11 @@ public class RiderDriverRequest extends AppCompatActivity {
         eagleRide.setVisibility(View.VISIBLE);
         requestType.setVisibility(View.VISIBLE);
         timeTV.setVisibility(View.VISIBLE);
+        firstTimeButton.setVisibility(View.VISIBLE);
         dropoff.setVisibility(View.VISIBLE);
         pickup.setVisibility(View.VISIBLE);
         pickupDropDown.setVisibility(View.VISIBLE);
+        and.setVisibility(View.VISIBLE);
         requestSwitch.setVisibility(View.VISIBLE);
         requestSwitch.setTextOn("Driver");
         requestSwitch.setTextOff("Rider");
@@ -114,7 +126,6 @@ public class RiderDriverRequest extends AppCompatActivity {
                 }
             }
         });
-        timeDropDown.setVisibility(View.VISIBLE);
         dropoffDropDown.setVisibility(View.VISIBLE);
         next.setVisibility(View.VISIBLE);
         next.setOnClickListener(new View.OnClickListener() {
@@ -123,10 +134,10 @@ public class RiderDriverRequest extends AppCompatActivity {
                 Toast.makeText(RiderDriverRequest.this, "Looking for a match", Toast.LENGTH_SHORT).show();
                 pb.setVisibility(View.VISIBLE);
 //                if (!requestSwitch.isChecked()) {
-//                    RideRequest ride = new RideRequest(Time.valueOf(String.valueOf(timeDropDown.getText())), String.valueOf(dropoffDropDown.getSelectedItem().toString()), String.valueOf(pickupDropDown.getSelectedItem().toString()));
+//                    RideRequest ride = new RideRequest(Time.valueOf(String.valueOf(time1DropDown.getText())), String.valueOf(dropoffDropDown.getSelectedItem().toString()), String.valueOf(pickupDropDown.getSelectedItem().toString()));
 //                    //TODO add to pool
 //                } else {
-//                    DriveRequest drive = new DriveRequest(Time.valueOf(String.valueOf(timeDropDown.getText())), String.valueOf(dropoffDropDown.getSelectedItem().toString()));
+//                    DriveRequest drive = new DriveRequest(Time.valueOf(String.valueOf(time1DropDown.getText())), String.valueOf(dropoffDropDown.getSelectedItem().toString()));
 //                    //TODO add to pool
 //                }
             }
@@ -153,7 +164,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         pickup = findViewById(R.id.pickup);
         pickupDropDown = findViewById(R.id.pickupDropDown);
         //TODO get pickup locations
-        String[] items = new String[]{"1", "2", "three"};
+        String[] items = new String[]{"Between COA and Flight Line", "Parking between Lehman and COAS", "Behind COAS"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         pickupDropDown.setAdapter(adapter);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -173,29 +184,81 @@ public class RiderDriverRequest extends AppCompatActivity {
         });
         timeTV = findViewById(R.id.time);
         dropoff = findViewById(R.id.dropoff);
-        timeDropDown = findViewById(R.id.timeDropDown);
         pb = findViewById(R.id.ProgressBar);
         pb.setVisibility(View.GONE);
-
-        //TODO put times?
-        times = new int[]{1,2,3,4,5,6,7,8,9,10,11,12};
-        CustomAdapter mCustomAdapter = new CustomAdapter(RiderDriverRequest.this, times);
-        timeDropDown.setAdapter(mCustomAdapter);
-
-        timeDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        firstTimeButton = findViewById(R.id.timeButton);
+        firstTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (isUserInteracting) {
-                    Toast.makeText(RiderDriverRequest.this, times[i], Toast.LENGTH_SHORT).show();
-                }
+            public void onClick(View v) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view = inflater.inflate(R.layout.time_picker, null, false);
+
+                final TimePicker myTimePicker = (TimePicker) view
+                        .findViewById(R.id.myTimePicker);
+
+                new AlertDialog.Builder(RiderDriverRequest.this).setView(view)
+                        .setTitle("Set Time")
+                        .setPositiveButton("Go", new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                String currentHourText = myTimePicker.getCurrentHour()
+                                        .toString();
+
+                                String currentMinuteText = myTimePicker
+                                        .getCurrentMinute().toString();
+
+                                Toast.makeText(RiderDriverRequest.this, currentHourText + ":" + currentMinuteText, Toast.LENGTH_SHORT).show();
+                                pickupHourEarly = Integer.valueOf(currentHourText);
+                                pickupMinEarly = Integer.valueOf(currentMinuteText);
+                                firstTimeButton.setText(new StringBuilder().append(pickupHourEarly).append(":").append(pickupMinEarly).toString());
+
+                                dialog.cancel();
+
+                            }
+
+                        }).show();
             }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+        });
 
+        secondTimeButton = findViewById(R.id.timeButton2);
+
+        secondTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view = inflater.inflate(R.layout.time_picker, null, false);
+
+                final TimePicker myTimePicker = (TimePicker) view
+                        .findViewById(R.id.myTimePicker);
+
+                new AlertDialog.Builder(RiderDriverRequest.this).setView(view)
+                        .setTitle("Set Time")
+                        .setPositiveButton("Go", new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                String currentHourText = myTimePicker.getCurrentHour()
+                                        .toString();
+
+                                String currentMinuteText = myTimePicker
+                                        .getCurrentMinute().toString();
+
+                                Toast.makeText(RiderDriverRequest.this, currentHourText + ":" + currentMinuteText, Toast.LENGTH_SHORT).show();
+                                pickupHourLate = Integer.valueOf(currentHourText);
+                                pickupMinLate = Integer.valueOf(currentMinuteText);
+                                secondTimeButton.setText(new StringBuilder().append(pickupHourLate).append(":").append(pickupMinLate).toString());
+
+                                dialog.cancel();
+
+                            }
+
+                        }).show();
             }
         });
 
         dropoffDropDown = findViewById(R.id.dropoffDropDown);
+        and = findViewById(R.id.and);
 
         //TODO put the actual names
         String[] dropItems = new String[]{"Tomcat", "Voyager", "Concord"};
@@ -208,10 +271,10 @@ public class RiderDriverRequest extends AppCompatActivity {
                 Toast.makeText(RiderDriverRequest.this, "Looking for a match", Toast.LENGTH_SHORT).show();
                 pb.setVisibility(View.VISIBLE);
 //                if (!requestSwitch.isChecked()) {
-//                    RideRequest ride = new RideRequest(Time.valueOf(String.valueOf(timeDropDown.getText())), String.valueOf(dropoffDropDown.getSelectedItem().toString()), String.valueOf(pickupDropDown.getSelectedItem().toString()));
+//                    RideRequest ride = new RideRequest(Time.valueOf(String.valueOf(time1DropDown.getText())), String.valueOf(dropoffDropDown.getSelectedItem().toString()), String.valueOf(pickupDropDown.getSelectedItem().toString()));
 //                    //TODO add to pool
 //                } else {
-//                    DriveRequest drive = new DriveRequest(Time.valueOf(String.valueOf(timeDropDown.getText())), String.valueOf(dropoffDropDown.getSelectedItem().toString()));
+//                    DriveRequest drive = new DriveRequest(Time.valueOf(String.valueOf(time1DropDown.getText())), String.valueOf(dropoffDropDown.getSelectedItem().toString()));
 //                    //TODO add to pool
 //                }
             }
@@ -219,12 +282,5 @@ public class RiderDriverRequest extends AppCompatActivity {
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
-
-
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-        isUserInteracting = true;
     }
 }

@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Register extends AppCompatActivity {
 
@@ -109,10 +110,16 @@ public class Register extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Register2.class);
-                intent.putExtra("Email", emailField.getText().toString());
-                intent.putExtra("Password", passwordField.getText().toString());
-                startActivity(intent);
+                if (!emailField.getText().toString().contains("@erau.edu") && !emailField.getText().toString().contains("@my.erau.edu") ){
+                    Toast.makeText(Register.this, "Email must be an ERAU email account", Toast.LENGTH_SHORT).show();
+                } else if (!passwordField.getText().toString().equals(confirmPasswordField.getText().toString())){
+                    Toast.makeText(Register.this, "Passwords aren't matching", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), Register2.class);
+                    intent.putExtra("Email", emailField.getText().toString());
+                    intent.putExtra("Password", passwordField.getText().toString());
+                    startActivity(intent);
+                }
             }
         });
         BottomNavigationView navigation = findViewById(R.id.navigation);

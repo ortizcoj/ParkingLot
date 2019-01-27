@@ -10,7 +10,7 @@
     <string name="email">Email</string>
     <string name="eagleRide">Eagle Ride</string>
     <string name="requestType">Type of request?</string>
-    <string name="time">What time would you want to do the pick up to be at?</string>
+    <string name="time">Between what times would you want to do the pick up to be at?</string>
     <string name="dropoff_location">dropoff Location</string>
     <string name="pick_up">Pick up</string>
     <string name="name">Name</string>

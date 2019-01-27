@@ -59,13 +59,32 @@
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
 
-    <Spinner
-        android:id="@+id/timeDropDown"
-        android:layout_width="match_parent"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/timeButton"
+        app:layout_constraintTop_toBottomOf="@id/time"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeButton2"
         app:layout_constraintTop_toBottomOf="@id/time"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"/>
+        app:layout_constraintLeft_toRightOf="@id/and"
+        android:layout_marginLeft="20dp"/>
+
+    <TextView
+        android:id="@+id/and"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="and"
+        android:textSize="12pt"
+        app:layout_constraintTop_toBottomOf="@id/time"
+        app:layout_constraintLeft_toRightOf="@id/timeButton"
+        app:layout_constraintRight_toLeftOf="@id/timeButton2"
+        android:layout_margin="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="25dp"/>
 
     <TextView
         android:id="@+id/dropoff"
@@ -73,7 +92,7 @@
         android:layout_height="wrap_content"
         android:text="@string/dropoff_location"
         android:textSize="12pt"
-        app:layout_constraintTop_toBottomOf="@id/timeDropDown"
+        app:layout_constraintTop_toBottomOf="@id/timeButton"
         android:layout_margin="20dp"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>

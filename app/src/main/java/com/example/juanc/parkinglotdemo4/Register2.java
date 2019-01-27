@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Register2 extends AppCompatActivity {
 
@@ -27,6 +28,8 @@ public class Register2 extends AppCompatActivity {
     private EditText brandET;
     private EditText modelET;
     private EditText colorET;
+    private String email;
+    private String password;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -81,6 +84,8 @@ public class Register2 extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO decide when to make the registration.
+                //Here or after gone to Menu screen (I suppose here)
                 Intent intent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(intent);
             }
@@ -94,6 +99,9 @@ public class Register2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+        email = extras.getString("Email");
+        password = extras.getString("Password");
         setContentView(R.layout.register_2_layout);
 
         mImageView = findViewById(R.id.map);

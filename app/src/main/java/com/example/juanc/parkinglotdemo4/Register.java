@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 public class Register extends AppCompatActivity {
 
     private ImageView mImageView;
@@ -120,9 +122,22 @@ public class Register extends AppCompatActivity {
                     intent.putExtra("Password", passwordField.getText().toString());
                     startActivity(intent);
                 }
+                
+                byte[] hashpass = hash(passwordField.getText());
+                
+                
             }
         });
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
+    
+    public byte[] hash(String password) throws NoSuchAlgorithmException {
+        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");        
+        byte[] passBytes = password.getBytes();
+        byte[] passHash = sha256.digest(passBytes);
+        return passHash;
+    }
+    
+    
 }

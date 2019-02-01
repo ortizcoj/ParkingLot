@@ -13,6 +13,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import javax.net.ssl.HttpsURLConnection;
+
 
 public class Register2 extends AppCompatActivity {
 
@@ -123,6 +127,17 @@ public class Register2 extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            	
+            	//set url for creating user
+            	String url = "https://eagleride2019.herokuapp.com/createUser";
+            	
+            	URL createUserPage = new URL(url);
+            	
+            	//open connection to create user web page
+            	HttpsURLConnection connection = (HttpsURLConnection) createUserPage.openConnection();
+            	
+            	
+            	
                 Intent intent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(intent);
             }

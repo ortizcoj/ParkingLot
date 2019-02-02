@@ -14,7 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Register extends AppCompatActivity {
 
@@ -119,25 +120,26 @@ public class Register extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(getApplicationContext(), Register2.class);
                     intent.putExtra("Email", emailField.getText().toString());
-                    intent.putExtra("Password", passwordField.getText().toString());
-                    startActivity(intent);
+
+                    try {
+                        byte[] hashpass = hash(passwordField.getText().toString());
+                        intent.putExtra("Password", hashpass);
+                        startActivity(intent);
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
+
                 }
-                
-                byte[] hashpass = hash(passwordField.getText());
-                
-                
             }
         });
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
-    
+
     public byte[] hash(String password) throws NoSuchAlgorithmException {
-        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");        
+        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
         byte[] passBytes = password.getBytes();
         byte[] passHash = sha256.digest(passBytes);
         return passHash;
     }
-    
-    
 }

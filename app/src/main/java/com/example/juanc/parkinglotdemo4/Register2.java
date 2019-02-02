@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -13,10 +14,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import javax.net.ssl.HttpsURLConnection;
 
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Register2 extends AppCompatActivity {
 
@@ -33,7 +45,7 @@ public class Register2 extends AppCompatActivity {
     private EditText modelET;
     private EditText colorET;
     private String email;
-    private String password;
+    byte[] password;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -90,6 +102,7 @@ public class Register2 extends AppCompatActivity {
             public void onClick(View v) {
                 //TODO decide when to make the registration.
                 //Here or after gone to Menu screen (I suppose here)
+                registration();
                 Intent intent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(intent);
             }
@@ -105,7 +118,7 @@ public class Register2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         email = extras.getString("Email");
-        password = extras.getString("Password");
+        password = extras.getByteArray("Password");
         setContentView(R.layout.register_2_layout);
 
         mImageView = findViewById(R.id.map);
@@ -127,22 +140,52 @@ public class Register2 extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	
-            	//set url for creating user
-            	String url = "https://eagleride2019.herokuapp.com/createUser";
-            	
-            	URL createUserPage = new URL(url);
-            	
-            	//open connection to create user web page
-            	HttpsURLConnection connection = (HttpsURLConnection) createUserPage.openConnection();
-            	
-            	
-            	
+                registration();
                 Intent intent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(intent);
             }
         });
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    private void registration() {
+        User userInfo = new User(nameET.getText().toString(), email, password, brandET.getText().toString(), modelET.getText().toString(), colorET.getText().toString());
+        Log.e("USERNAME", userInfo.getName());
+        Log.e("USERPASSWORD", userInfo.getPassword().toString());
+        Log.e("USEREMAIL", userInfo.getEmail());
+        Log.e("USERBRAND", userInfo.getCarMake());
+        Log.e("USERMODEL", userInfo.getCarModel());
+        Log.e("USERCOLOR", userInfo.getCarColor());
+
+        Log.e("eagleride", "about to send stuff");
+
+        final OkHttpClient client = new OkHttpClient();
+
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "{\n    \"name\": \"" + userInfo.getName() + "\",\n    " +
+                "\"email\": \"" + userInfo.getEmail() + "\",\n    \"password\": \"" + password + "\",\n    \"carMake\": \""
+                + userInfo.getCarMake() + "\",\n    \"carModel\": \"" + userInfo.getCarModel() + "\",\n    \"carColor\": \""
+                + userInfo.getCarColor() + "\"\n}");
+        final Request request = new Request.Builder()
+                .url("https://eagleride2019.herokuapp.com/createUser")
+                .post(body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        Thread thread = new Thread(new Runnable(){
+            public void run() {
+
+                try {
+                    okhttp3.Response response = client.newCall(request).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        });
+
+        thread.start();
     }
 }

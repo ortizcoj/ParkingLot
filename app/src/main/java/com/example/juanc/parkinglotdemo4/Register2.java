@@ -158,34 +158,7 @@ public class Register2 extends AppCompatActivity {
         Log.e("USERMODEL", userInfo.getCarModel());
         Log.e("USERCOLOR", userInfo.getCarColor());
 
-        Log.e("eagleride", "about to send stuff");
-
-        final OkHttpClient client = new OkHttpClient();
-
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\n    \"name\": \"" + userInfo.getName() + "\",\n    " +
-                "\"email\": \"" + userInfo.getEmail() + "\",\n    \"password\": \"" + password + "\",\n    \"carMake\": \""
-                + userInfo.getCarMake() + "\",\n    \"carModel\": \"" + userInfo.getCarModel() + "\",\n    \"carColor\": \""
-                + userInfo.getCarColor() + "\"\n}");
-        final Request request = new Request.Builder()
-                .url("https://eagleride2019.herokuapp.com/createUser")
-                .post(body)
-                .addHeader("Content-Type", "application/json")
-                .build();
-
-        Thread thread = new Thread(new Runnable(){
-            public void run() {
-
-                try {
-                    okhttp3.Response response = client.newCall(request).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        });
-
-        thread.start();
+        Networking networking = new Networking();
+        networking.registerUser(userInfo);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.juanc.parkinglotdemo4;
+package com.example.juanc.parkinglotdemo4.RegisterLogin;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
+import com.example.juanc.parkinglotdemo4.R;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

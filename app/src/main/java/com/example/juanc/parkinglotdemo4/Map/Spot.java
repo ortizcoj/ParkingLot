@@ -1,4 +1,4 @@
-package com.example.juanc.parkinglotdemo4;
+package com.example.juanc.parkinglotdemo4.Map;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,6 +9,8 @@ import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.example.juanc.parkinglotdemo4.R;
 
 public class Spot extends View {
     private Rect rectangle;

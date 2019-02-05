@@ -1,4 +1,4 @@
-package com.example.juanc.parkinglotdemo4;
+package com.example.juanc.parkinglotdemo4.Request;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -24,6 +24,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
+import com.example.juanc.parkinglotdemo4.R;
+
 public class RiderDriverRequest extends AppCompatActivity {
 
     private TextView eagleRide;
@@ -45,7 +48,6 @@ public class RiderDriverRequest extends AppCompatActivity {
     private int pickupHourLate;
     private int pickupMinLate;
     private TextView and;
-
 
     //TODO add a profile selectable icon
 
@@ -216,7 +218,6 @@ public class RiderDriverRequest extends AppCompatActivity {
                                 dialog.cancel();
 
                             }
-
                         }).show();
             }
         });
@@ -260,8 +261,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         dropoffDropDown = findViewById(R.id.dropoffDropDown);
         and = findViewById(R.id.and);
 
-        //TODO put the actual names
-        String[] dropItems = new String[]{"Tomcat", "Voyager", "Concord"};
+        String[] dropItems = new String[]{"Tomcat", "Voyager", "Concorde", "Cochran", "Earhart", "Enterprise"};
         ArrayAdapter<String> dropAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, dropItems);
         dropoffDropDown.setAdapter(dropAdapter);
         next = findViewById(R.id.next);

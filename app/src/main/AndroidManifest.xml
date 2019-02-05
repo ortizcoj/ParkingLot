@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Menu"
+            android:name=".RegisterLogin.Menu"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,16 +20,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LotDisplay"
+        <activity android:name=".Map.LotDisplay"
             android:label="EagleRide">
         </activity>
-        <activity android:name=".Register"
+        <activity android:name=".RegisterLogin.Register"
             android:label="EagleRide">
         </activity>
-        <activity android:name=".RiderDriverRequest"
+        <activity android:name=".Request.RiderDriverRequest"
             android:label="EagleRide">
         </activity>
-        <activity android:name=".Register2"
+        <activity android:name=".RegisterLogin.Register2"
             android:label="EagleRide">
         </activity>
 

@@ -1,4 +1,4 @@
-package com.example.juanc.parkinglotdemo4;
+package com.example.juanc.parkinglotdemo4.RegisterLogin;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -13,22 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
+import com.example.juanc.parkinglotdemo4.Network.Networking;
+import com.example.juanc.parkinglotdemo4.R;
+import com.example.juanc.parkinglotdemo4.Network.User;
 
 public class Register2 extends AppCompatActivity {
 
@@ -100,11 +89,7 @@ public class Register2 extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO decide when to make the registration.
-                //Here or after gone to Menu screen (I suppose here)
                 registration();
-                Intent intent = new Intent(getApplicationContext(), Menu.class);
-                startActivity(intent);
             }
         });
         mImageView.setVisibility(View.GONE);
@@ -141,8 +126,6 @@ public class Register2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 registration();
-                Intent intent = new Intent(getApplicationContext(), Menu.class);
-                startActivity(intent);
             }
         });
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -151,14 +134,8 @@ public class Register2 extends AppCompatActivity {
 
     private void registration() {
         User userInfo = new User(nameET.getText().toString(), email, password, brandET.getText().toString(), modelET.getText().toString(), colorET.getText().toString());
-        Log.e("USERNAME", userInfo.getName());
-        Log.e("USERPASSWORD", userInfo.getPassword().toString());
-        Log.e("USEREMAIL", userInfo.getEmail());
-        Log.e("USERBRAND", userInfo.getCarMake());
-        Log.e("USERMODEL", userInfo.getCarModel());
-        Log.e("USERCOLOR", userInfo.getCarColor());
 
         Networking networking = new Networking();
-        networking.registerUser(userInfo);
+        networking.registerUser(userInfo, getApplicationContext());
     }
 }

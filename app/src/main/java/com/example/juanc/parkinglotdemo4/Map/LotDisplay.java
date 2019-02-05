@@ -1,4 +1,4 @@
-package com.example.juanc.parkinglotdemo4;
+package com.example.juanc.parkinglotdemo4.Map;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.juanc.parkinglotdemo4.R;
 
 public class LotDisplay extends AppCompatActivity {
 

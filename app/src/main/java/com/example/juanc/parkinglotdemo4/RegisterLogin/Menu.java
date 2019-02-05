@@ -1,4 +1,4 @@
-package com.example.juanc.parkinglotdemo4;
+package com.example.juanc.parkinglotdemo4.RegisterLogin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
+import com.example.juanc.parkinglotdemo4.Network.LoginInfo;
+import com.example.juanc.parkinglotdemo4.Network.Networking;
+import com.example.juanc.parkinglotdemo4.Network.User;
+import com.example.juanc.parkinglotdemo4.R;
+import com.example.juanc.parkinglotdemo4.Request.RiderDriverRequest;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Menu extends AppCompatActivity {
 
@@ -22,6 +33,7 @@ public class Menu extends AppCompatActivity {
     private EditText passwordED;
     private Button register;
     private Button login;
+    private String regUser;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -82,6 +94,12 @@ public class Menu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            regUser = extras.getString("Registration");
+            Toast.makeText(getApplicationContext(), regUser, Toast.LENGTH_LONG).show();
+        }
         setContentView(R.layout.menu_layout);
 
         mImageView = findViewById(R.id.map);
@@ -96,8 +114,7 @@ public class Menu extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
-                startActivity(intent);
+                registration();
             }
         });
         register = findViewById(R.id.registerButton);
@@ -111,6 +128,25 @@ public class Menu extends AppCompatActivity {
         });
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    private void registration() {
+        try {
+            byte[] hashpass = hash(passwordED.getText().toString());
+            LoginInfo loginInfo = new LoginInfo(emailED.getText().toString(), hashpass);
+
+            Networking networking = new Networking();
+            networking.loginUser(loginInfo, getApplicationContext());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public byte[] hash(String password) throws NoSuchAlgorithmException {
+        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+        byte[] passBytes = password.getBytes();
+        byte[] passHash = sha256.digest(passBytes);
+        return passHash;
     }
 
 }

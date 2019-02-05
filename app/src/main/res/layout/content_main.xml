@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".LotDisplay"
-    tools:showIn="@layout/activity_main">
+    tools:context=".Map.LotDisplay">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,61 +18,61 @@
 
     </LinearLayout>
 
-    <com.example.juanc.parkinglotdemo4.Spot
+    <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:spotID="0"
         android:id="@+id/spot0"/>
 
-    <com.example.juanc.parkinglotdemo4.Spot
+    <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:spotID="1"
         android:id="@+id/spot1"/>
 
-    <com.example.juanc.parkinglotdemo4.Spot
+    <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:spotID="2"
         android:id="@+id/spot2"/>
 
-    <com.example.juanc.parkinglotdemo4.Spot
+    <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:spotID="3"
         android:id="@+id/spot3"/>
 
-    <com.example.juanc.parkinglotdemo4.Spot
+    <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:spotID="4"
         android:id="@+id/spot4"/>
 
-    <com.example.juanc.parkinglotdemo4.Spot
+    <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:spotID="5"
         android:id="@+id/spot5"/>
 
-    <com.example.juanc.parkinglotdemo4.Spot
+    <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:spotID="6"
         android:id="@+id/spot6"/>
 
-    <com.example.juanc.parkinglotdemo4.Spot
+    <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:spotID="7"
         android:id="@+id/spot7"/>
 
-    <com.example.juanc.parkinglotdemo4.Spot
+    <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:spotID="8"
         android:id="@+id/spot8"/>
 
-    <com.example.juanc.parkinglotdemo4.Spot
+    <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:spotID="9"

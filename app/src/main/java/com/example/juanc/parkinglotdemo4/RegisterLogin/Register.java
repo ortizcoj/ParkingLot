@@ -125,7 +125,7 @@ public class Register extends AppCompatActivity {
                     intent.putExtra("Email", emailField.getText().toString());
 
                     try {
-                        byte[] hashpass = hash(passwordField.getText().toString());
+                        String hashpass = hash(passwordField.getText().toString());
                         intent.putExtra("Password", hashpass);
                         startActivity(intent);
                     } catch (NoSuchAlgorithmException e) {
@@ -139,10 +139,12 @@ public class Register extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    public byte[] hash(String password) throws NoSuchAlgorithmException {
-        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+    public String hash(String password) throws NoSuchAlgorithmException {
+        MessageDigest sha256 = new MessageDigest("SHA-256");
         byte[] passBytes = password.getBytes();
+        sha256.update(passBytes);
         byte[] passHash = sha256.digest(passBytes);
-        return passHash;
+        String strHashpass = passHash.toString();
+        return strHashpass;
     }
 }

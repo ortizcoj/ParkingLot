@@ -140,7 +140,7 @@ public class Register extends AppCompatActivity {
     }
 
     public String hash(String password) throws NoSuchAlgorithmException {
-        MessageDigest sha256 = new MessageDigest("SHA-256");
+        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
         byte[] passBytes = password.getBytes();
         sha256.update(passBytes);
         byte[] passHash = sha256.digest(passBytes);

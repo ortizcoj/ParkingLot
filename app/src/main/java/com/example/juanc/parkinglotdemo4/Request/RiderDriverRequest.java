@@ -165,29 +165,24 @@ public class RiderDriverRequest extends AppCompatActivity {
     }
 
     private void sendRequest() {
+        Request request = new Request(email, startTime, endTime, pickupDropDown.getSelectedItem().toString(), dropoffDropDown.getSelectedItem().toString());
+        Sockets socket = new Sockets();
+        realSocket = socket.getSocket();
+        realSocket.on("get_match", onNewMessage);
+        realSocket.connect();
+        MediaType mediaType = MediaType.parse("application/json");
+        final RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + request.getEmail() + "\",\n    " +
+                "\"startTime\": \"" + request.getStartTime() + "\",\n    \"endTime\": \"" + request.getEndTime()
+                + "\",\n    \"pickupLocation\": \"" + request.getPickupLocation() + "\",\n    \"dropoffLot\": \"" + request.getDropoffLot()
+                + "\"\n}");
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Request request = new Request(email, startTime, endTime, pickupDropDown.getSelectedItem().toString(), dropoffDropDown.getSelectedItem().toString());
-                Sockets socket = new Sockets();
-                realSocket = socket.getSocket();
-                realSocket.connect();
-                MediaType mediaType = MediaType.parse("application/json");
-                RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + request.getEmail() + "\",\n    " +
-                        "\"startTime\": \"" + request.getStartTime() + "\",\n    \"endTime\": \"" + request.getEndTime()
-                        + "\",\n    \"pickupLocation\": \"" + request.getPickupLocation() + "\",\n    \"dropoffLot\": \"" + request.getDropoffLot()
-                        + "\"\n}");
                 realSocket.emit("send_request", body);
-
-                listenForInfo();
             }
         });
         thread.start();
 
-    }
-
-    private void listenForInfo() {
-        realSocket.on("get_match", onNewMessage);
     }
 
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
@@ -196,10 +191,12 @@ public class RiderDriverRequest extends AppCompatActivity {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Request answer = (Request) args[0];
+//                    Request answer = (Request) args[0];
+                    String string = (String) args[0];
                     Log.e("Response to socket", "RESPONSE FROM SOCKET");
                 }
             });
+            thread.start();
         }
     };
 

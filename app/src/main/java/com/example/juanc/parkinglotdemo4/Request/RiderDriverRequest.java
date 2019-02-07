@@ -182,6 +182,7 @@ public class RiderDriverRequest extends AppCompatActivity {
                 listenForInfo();
             }
         });
+        thread.start();
 
     }
 

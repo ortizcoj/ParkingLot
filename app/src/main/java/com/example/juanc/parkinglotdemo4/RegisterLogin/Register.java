@@ -20,6 +20,8 @@ import com.example.juanc.parkinglotdemo4.R;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.spec.SecretKeySpec;
+
 public class Register extends AppCompatActivity {
 
     private ImageView mImageView;
@@ -83,6 +85,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Register2.class);
+//                    String pass = hash(passwordField.getText().toString());
                 intent.putExtra("Email", emailField.getText().toString());
                 intent.putExtra("Password", passwordField.getText().toString());
                 startActivity(intent);
@@ -123,14 +126,10 @@ public class Register extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(getApplicationContext(), Register2.class);
                     intent.putExtra("Email", emailField.getText().toString());
+//                        String hashpass = hash(passwordField.getText().toString());
 
-                    try {
-                        byte[] hashpass = hash(passwordField.getText().toString());
-                        intent.putExtra("Password", hashpass);
-                        startActivity(intent);
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    }
+                    intent.putExtra("Password", passwordField.getText().toString());
+                    startActivity(intent);
 
                 }
             }
@@ -139,10 +138,12 @@ public class Register extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    public byte[] hash(String password) throws NoSuchAlgorithmException {
-        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-        byte[] passBytes = password.getBytes();
-        byte[] passHash = sha256.digest(passBytes);
-        return passHash;
-    }
+//    public String hash(String password) throws NoSuchAlgorithmException {
+//        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+//        byte[] passBytes = password.getBytes();
+//        sha256.update(passBytes);
+//        byte[] passHash = sha256.digest(passBytes);
+//        String strHashpass = passHash.toString();
+//        return strHashpass;
+//    }
 }

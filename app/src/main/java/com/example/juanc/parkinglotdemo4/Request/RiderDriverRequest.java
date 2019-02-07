@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,14 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
+import com.example.juanc.parkinglotdemo4.Network.Request;
 import com.example.juanc.parkinglotdemo4.R;
+import com.example.juanc.parkinglotdemo4.Sockets;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Socket;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class RiderDriverRequest extends AppCompatActivity {
 
@@ -48,6 +56,10 @@ public class RiderDriverRequest extends AppCompatActivity {
     private int pickupHourLate;
     private int pickupMinLate;
     private TextView and;
+    String email;
+    String startTime = "";
+    String endTime = "";
+    private Socket realSocket;
 
     //TODO add a profile selectable icon
 
@@ -133,8 +145,11 @@ public class RiderDriverRequest extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                convertToTimes();
+                sendRequest();
                 Toast.makeText(RiderDriverRequest.this, "Looking for a match", Toast.LENGTH_SHORT).show();
                 pb.setVisibility(View.VISIBLE);
+                
 //                if (!requestSwitch.isChecked()) {
 //                    RideRequest ride = new RideRequest(Time.valueOf(String.valueOf(time1DropDown.getText())), String.valueOf(dropoffDropDown.getSelectedItem().toString()), String.valueOf(pickupDropDown.getSelectedItem().toString()));
 //                    //TODO add to pool
@@ -149,10 +164,55 @@ public class RiderDriverRequest extends AppCompatActivity {
         return true;
     }
 
+    private void sendRequest() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Request request = new Request(email, startTime, endTime, pickupDropDown.getSelectedItem().toString(), dropoffDropDown.getSelectedItem().toString());
+                Sockets socket = new Sockets();
+                realSocket = socket.getSocket();
+                realSocket.connect();
+                MediaType mediaType = MediaType.parse("application/json");
+                RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + request.getEmail() + "\",\n    " +
+                        "\"startTime\": \"" + request.getStartTime() + "\",\n    \"endTime\": \"" + request.getEndTime()
+                        + "\",\n    \"pickupLocation\": \"" + request.getPickupLocation() + "\",\n    \"dropoffLot\": \"" + request.getDropoffLot()
+                        + "\"\n}");
+                realSocket.emit("send_request", body);
+
+                listenForInfo();
+            }
+        });
+
+    }
+
+    private void listenForInfo() {
+        realSocket.on("get_match", onNewMessage);
+    }
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Request answer = (Request) args[0];
+                    Log.e("Response to socket", "RESPONSE FROM SOCKET");
+                }
+            });
+        }
+    };
+
+    private void convertToTimes() {
+        startTime = "" + pickupHourEarly + pickupMinEarly;
+        endTime = "" + pickupHourLate + pickupMinLate;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.request);
+        Bundle extras = getIntent().getExtras();
+        email = extras.getString("Email");
 
         mImageView = findViewById(R.id.map);
         mImageView.setVisibility(View.INVISIBLE);
@@ -268,6 +328,8 @@ public class RiderDriverRequest extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                convertToTimes();
+                sendRequest();
                 Toast.makeText(RiderDriverRequest.this, "Looking for a match", Toast.LENGTH_SHORT).show();
                 pb.setVisibility(View.VISIBLE);
 //                if (!requestSwitch.isChecked()) {

@@ -16,7 +16,7 @@ public class Spot extends View {
     private Rect rectangle;
     private Paint paint;
     private static final int WIDTH = 86;
-    private static final int HEIGHT = 35;
+    private static final int HEIGHT = 37;
     private int spot;
 
 
@@ -53,7 +53,7 @@ public class Spot extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         rectangle.left = 902;
-        rectangle.top = 600 + (spot*HEIGHT) + (spot*3);
+        rectangle.top = 655 + (spot*HEIGHT) + (spot*5);
         rectangle.right = rectangle.left + WIDTH;
         rectangle.bottom = rectangle.top + HEIGHT;
 

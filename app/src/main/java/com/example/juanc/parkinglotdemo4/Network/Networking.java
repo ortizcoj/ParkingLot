@@ -23,6 +23,8 @@ public class Networking {
 
         final OkHttpClient client = new OkHttpClient();
 
+        userInfo.setPassword("[B@55082b1".getBytes());
+
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "{\n    \"name\": \"" + userInfo.getName() + "\",\n    " +
                 "\"email\": \"" + userInfo.getEmail() + "\",\n    \"password\": \"" + userInfo.getPassword().toString()
@@ -62,16 +64,16 @@ public class Networking {
         thread.start();
     }
 
-    public void loginUser(LoginInfo loginInfo, final Context context) {
+    public void loginUser(final LoginInfo loginInfo, final Context context) {
 
         final OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + loginInfo.getEmail() + "\",\n  " +
-                        "  \"password\": \"" + loginInfo.getPassword().toString() + "\"\n}");
-
 //        RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + loginInfo.getEmail() + "\",\n  " +
-//                "  \"password\": \"" + "[B@55082b1" + "\"\n}");
+//                        "  \"password\": \"" + loginInfo.getPassword().toString() + "\"\n}");
+
+        RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + loginInfo.getEmail() + "\",\n  " +
+                "  \"password\": \"" + "[B@55082b1" + "\"\n}");
 
         final Request request = new Request.Builder()
                 .url("https://eagleride2019.herokuapp.com/loginUser")
@@ -91,6 +93,7 @@ public class Networking {
                         context.startActivity(intent);
                     } else if (jsonData.equals("true\n")){
                         Intent intent = new Intent(context, RiderDriverRequest.class);
+                        intent.putExtra("Email", loginInfo.getEmail());
                         intent.putExtra("Registration", "Welcome");
                         context.startActivity(intent);
                     }

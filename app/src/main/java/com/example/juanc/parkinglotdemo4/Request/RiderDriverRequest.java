@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Network.Request;
+import com.example.juanc.parkinglotdemo4.Profile;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.Sockets;
 import com.github.nkzawa.emitter.Emitter;
@@ -49,6 +50,7 @@ public class RiderDriverRequest extends AppCompatActivity {
     private Spinner dropoffDropDown;
     private Spinner pickupDropDown;
     private Button next;
+    private Button profile;
     private ImageView mImageView;
     private ImageView citationLot;
     private ProgressBar pb;
@@ -97,6 +99,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         citationLot.setVisibility(View.VISIBLE);
         firstTimeButton.setVisibility(View.GONE);
         secondTimeButton.setVisibility(View.GONE);
+        profile.setVisibility(View.GONE);
         citationLot.setX(200);
         citationLot.setY(850);
         citationLot.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +134,15 @@ public class RiderDriverRequest extends AppCompatActivity {
             pickup.setVisibility(View.INVISIBLE);
             pickupDropDown.setVisibility(View.INVISIBLE);
         }
+        profile.setVisibility(View.VISIBLE);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Profile.class);
+                startActivity(intent);
+            }
+        });
         requestSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -216,6 +228,15 @@ public class RiderDriverRequest extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         email = extras.getString("Email");
 
+        profile = findViewById(R.id.profile);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Profile.class);
+                startActivity(intent);
+            }
+        });
         mImageView = findViewById(R.id.map);
         mImageView.setVisibility(View.INVISIBLE);
         citationLot = findViewById(R.id.citation);
@@ -227,8 +248,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         requestSwitch.setTextOff("Rider");
         pickup = findViewById(R.id.pickup);
         pickupDropDown = findViewById(R.id.pickupDropDown);
-        //TODO get pickup locations
-        String[] items = new String[]{"Between COA and Flight Line", "Parking between Lehman and COAS", "Behind COAS"};
+        String[] items = new String[]{"Parking circle of Student Union", "Between COA and Flight Line", "Parking between Lehman and COAS", "Behind COAS", "Parking by COB"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         pickupDropDown.setAdapter(adapter);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

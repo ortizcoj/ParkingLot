@@ -73,6 +73,8 @@ public class Register extends AppCompatActivity {
     }
 
     private boolean setUpRideMainUI() {
+        mImageView.setVisibility(View.GONE);
+        citationLot.setVisibility(View.GONE);
         emailField.setVisibility(View.VISIBLE);
         email.setVisibility(View.VISIBLE);
         passwordField.setVisibility(View.VISIBLE);
@@ -91,8 +93,6 @@ public class Register extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        mImageView.setVisibility(View.GONE);
-        citationLot.setVisibility(View.GONE);
         return true;
     }
 

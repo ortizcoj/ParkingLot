@@ -27,6 +27,17 @@
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/eagleRide"
+        android:text="@string/profile"
+        android:layout_margin="20dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
     <TextView
         android:id="@+id/requestType"
         android:layout_width="wrap_content"

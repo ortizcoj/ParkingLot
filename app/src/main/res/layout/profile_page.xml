@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/navigation" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        app:layout_constraintBottom_toTopOf="@id/navigation"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/map"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/citation"
+        android:src="@drawable/citation_lot_map1"
+        app:layout_constraintBottom_toBottomOf="@id/navigation"
+        android:background="@null"/>
+
+    <TextView
+        android:id="@+id/profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/profile"
+        android:textSize="16pt"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="20dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <TextView
+        android:id="@+id/nameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name"
+        android:textSize="12pt"
+        app:layout_constraintTop_toBottomOf="@id/profile"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"
+        app:layout_constraintTop_toBottomOf="@id/profile"
+        app:layout_constraintLeft_toRightOf="@id/nameTV"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <TextView
+        android:id="@+id/emailTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/email"
+        android:textSize="12pt"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        android:layout_margin="20dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/email"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintLeft_toRightOf="@id/emailTV"
+        android:layout_margin="20dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <TextView
+        android:id="@+id/brandTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/brand"
+        android:textSize="12pt"
+        app:layout_constraintTop_toBottomOf="@id/email"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <EditText
+        android:id="@+id/brandET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        app:layout_constraintTop_toBottomOf="@id/email"
+        app:layout_constraintLeft_toRightOf="@id/brandTV"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+    <TextView
+
+        android:id="@+id/modelTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/model"
+        android:textSize="12pt"
+        app:layout_constraintTop_toBottomOf="@id/brandET"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <EditText
+        android:id="@+id/modelET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        app:layout_constraintTop_toBottomOf="@id/brandET"
+        app:layout_constraintLeft_toRightOf="@id/modelTV"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <TextView
+
+        android:id="@+id/colorTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/color"
+        android:textSize="12pt"
+        app:layout_constraintTop_toBottomOf="@id/modelET"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <EditText
+        android:id="@+id/colorET"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/modelET"
+        app:layout_constraintLeft_toRightOf="@id/colorTV"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/updateButton"
+        android:text="@string/update"
+        app:layout_constraintTop_toBottomOf="@id/colorET"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/confirmButton"
+        android:text="@string/confirm"
+        app:layout_constraintTop_toBottomOf="@id/colorET"
+        app:layout_constraintLeft_toRightOf="@id/updateButton"
+        android:layout_margin="17dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+</android.support.constraint.ConstraintLayout>

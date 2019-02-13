@@ -91,9 +91,14 @@ public class Networking {
                         Intent intent = new Intent(context, Menu.class);
                         intent.putExtra("Registration", "Invalid password or email");
                         context.startActivity(intent);
-                    } else if (jsonData.equals("true\n")){
+                    } else {
                         Intent intent = new Intent(context, RiderDriverRequest.class);
+                        intent.putExtra("carColor", jsonData.split("\"")[3]);
+                        intent.putExtra("carMake", jsonData.split("\"")[7]);
+                        intent.putExtra("carModel", jsonData.split("\"")[11]);
+                        intent.putExtra("Name", jsonData.split("\"")[15]);
                         intent.putExtra("Email", loginInfo.getEmail());
+                        intent.putExtra("Password", loginInfo.getPassword().toString());
                         intent.putExtra("Registration", "Welcome");
                         context.startActivity(intent);
                     }

@@ -65,6 +65,11 @@ public class RiderDriverRequest extends AppCompatActivity {
     String startTime = "";
     String endTime = "";
     private Socket realSocket;
+    private String name = "";
+    private String carColor = "";
+    private String carMake = "";
+    private String carModel = "";
+    private String password = "";
 
     //TODO add a profile selectable icon
 
@@ -140,6 +145,12 @@ public class RiderDriverRequest extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getApplicationContext(), Profile.class);
+                intent.putExtra("carColor", carColor);
+                intent.putExtra("carMake", carMake);
+                intent.putExtra("carModel", carModel);
+                intent.putExtra("Name", name);
+                intent.putExtra("Email", email);
+                intent.putExtra("Password", password);
                 startActivity(intent);
             }
         });
@@ -227,6 +238,11 @@ public class RiderDriverRequest extends AppCompatActivity {
         setContentView(R.layout.request);
         Bundle extras = getIntent().getExtras();
         email = extras.getString("Email");
+        name = extras.getString("Name");
+        carColor = extras.getString("carColor");
+        carMake = extras.getString("carMake");
+        carModel = extras.getString("carModel");
+        password = extras.getString("Password");
 
         profile = findViewById(R.id.profile);
         profile.setOnClickListener(new View.OnClickListener() {
@@ -234,6 +250,12 @@ public class RiderDriverRequest extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getApplicationContext(), Profile.class);
+                intent.putExtra("carColor", carColor);
+                intent.putExtra("carMake", carMake);
+                intent.putExtra("carModel", carModel);
+                intent.putExtra("Name", name);
+                intent.putExtra("Email", email);
+                intent.putExtra("Password", password);
                 startActivity(intent);
             }
         });

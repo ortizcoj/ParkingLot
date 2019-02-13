@@ -77,6 +77,12 @@ public class Menu extends AppCompatActivity {
         passwordED.setVisibility(View.VISIBLE);
         passwordTV.setVisibility(View.VISIBLE);
         login.setVisibility(View.VISIBLE);
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registration();
+            }
+        });
         register.setVisibility(View.VISIBLE);
         register.setX(50);
         register.setOnClickListener(new View.OnClickListener() {

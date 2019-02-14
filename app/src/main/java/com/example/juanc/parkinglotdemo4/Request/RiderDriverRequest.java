@@ -71,8 +71,6 @@ public class RiderDriverRequest extends AppCompatActivity {
     private String carModel = "";
     private String password = "";
 
-    //TODO add a profile selectable icon
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -171,7 +169,6 @@ public class RiderDriverRequest extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO decide how to make ride OR drive
                 convertToTimes();
                 sendRequest();
                 Toast.makeText(RiderDriverRequest.this, "Looking for a match", Toast.LENGTH_SHORT).show();
@@ -187,26 +184,15 @@ public class RiderDriverRequest extends AppCompatActivity {
         Request request = new Request(email, startTime, endTime, pickupDropDown.getSelectedItem().toString(), dropoffDropDown.getSelectedItem().toString());
         Sockets socket = new Sockets();
         realSocket = socket.getSocket();
-        realSocket.on("get_match", onNewMessage);
+        realSocket.on("get_rider_match", onNewMessage);
+        realSocket.on("get_driver_match", onNewMessage);
         realSocket.connect();
         final JSONObject body = new JSONObject();
-        try {
-            body.put("email", request.getEmail());
-            body.put("startTime", request.getStartTime());
-            body.put("endTime", request.getEndTime());
-            body.put("pickupLocation", request.getPickupLocation());
-            body.put("dropoffLot", request.getDropoffLot());
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    realSocket.emit("send_request", body);
-                }
-            });
-            thread.start();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (!requestSwitch.isChecked()){
+            sendRiderRequest(request, body);
+        } else {
+            sendDriverRequest(request, body);
         }
-
     }
 
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
@@ -226,6 +212,42 @@ public class RiderDriverRequest extends AppCompatActivity {
             thread.start();
         }
     };
+    private void sendDriverRequest(Request request, final JSONObject body) {
+        try {
+            body.put("email", request.getEmail());
+            body.put("startTime", request.getStartTime());
+            body.put("endTime", request.getEndTime());
+            body.put("dropoffLot", request.getDropoffLot());
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    realSocket.emit("send_drive_request", body);
+                }
+            });
+            thread.start();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendRiderRequest(Request request, final JSONObject body) {
+        try {
+            body.put("email", request.getEmail());
+            body.put("startTime", request.getStartTime());
+            body.put("endTime", request.getEndTime());
+            body.put("pickupLocation", request.getPickupLocation());
+            body.put("dropoffLot", request.getDropoffLot());
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    realSocket.emit("send_ride_request", body);
+                }
+            });
+            thread.start();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void convertToTimes() {
         startTime = "" + pickupHourEarly + pickupMinEarly;
@@ -372,7 +394,6 @@ public class RiderDriverRequest extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO ride or drive request. Differences?
                 convertToTimes();
                 sendRequest();
                 Toast.makeText(RiderDriverRequest.this, "Looking for a match", Toast.LENGTH_SHORT).show();

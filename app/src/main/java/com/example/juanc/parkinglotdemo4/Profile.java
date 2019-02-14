@@ -9,10 +9,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,10 +20,6 @@ import android.widget.TextView;
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Network.Networking;
 import com.example.juanc.parkinglotdemo4.Network.User;
-
-import org.w3c.dom.Text;
-
-import static java.security.AccessController.getContext;
 
 public class Profile extends AppCompatActivity {
 
@@ -78,7 +72,6 @@ public class Profile extends AppCompatActivity {
         profileText.setVisibility(View.VISIBLE);
         Bundle extras = getIntent().getExtras();
         emailField.setText(extras.getString("Email"));
-        emailField.setText(extras.getString("Email"));
         nameET.setText(extras.getString("Name"));
         colorET.setText(extras.getString("carColor"));
         brandET.setText(extras.getString("carMake"));
@@ -112,19 +105,16 @@ public class Profile extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         builder.setTitle("Change Password");
 
-// Set up the input
-
         final TextView old1 = new TextView(this);
-        old1.setText("Enter old password");
+        old1.setText(R.string.EnterPassword);
         final TextView old2 = new TextView(this);
-        old2.setText("Confirm old password");
+        old2.setText(R.string.ConfirmPassword);
         final TextView new1 = new TextView(this);
-        new1.setText("Enter new password");
+        new1.setText(R.string.NewPassword);
         final EditText inputOld = new EditText(this);
         final EditText inputOld2 = new EditText(this);
         final EditText inputNew = new EditText(this);
 
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         inputOld.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         layout.addView(old1);
         layout.addView(inputOld);
@@ -137,7 +127,6 @@ public class Profile extends AppCompatActivity {
 
         builder.setView(layout);
 
-// Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -145,8 +134,10 @@ public class Profile extends AppCompatActivity {
                 String oldPassword2 = inputOld2.getText().toString();
                 if (oldPassword1.equals(oldPassword2) && oldPassword1.equals(password)){
                     password = inputNew.getText().toString();
-
                 }
+                
+                //TODO here I would hash the password
+                updatePassword();
 
             }
         });
@@ -158,6 +149,11 @@ public class Profile extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private void updatePassword() {
+        Networking networking = new Networking();
+        networking.updatePassword(password, getApplicationContext());
     }
 
     private void confirmUpdateMethod() {

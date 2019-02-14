@@ -22,4 +22,7 @@
     <string name="update">Update</string>
     <string name="confirm">Confirm</string>
     <string name="changePassword">Change Password</string>
+    <string name="EnterPassword">Enter old password</string>
+    <string name="ConfirmPassword">Confirm old password</string>
+    <string name="NewPassword">Enter new password</string>
 </resources>

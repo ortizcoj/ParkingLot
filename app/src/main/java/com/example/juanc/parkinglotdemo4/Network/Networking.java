@@ -117,13 +117,10 @@ public class Networking {
     public void updateUser(User userInfo, final Context context) {
         final OkHttpClient client = new OkHttpClient();
 
-        userInfo.setPassword("[B@55082b1".getBytes());
-
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "{\n    \"name\": \"" + userInfo.getName() + "\",\n    " +
-                "\"email\": \"" + userInfo.getEmail() + "\",\n    \"password\": \"" + userInfo.getPassword().toString()
-                + "\",\n    \"carMake\": \"" + userInfo.getCarMake() + "\",\n    \"carModel\": \"" + userInfo.getCarModel()
-                + "\",\n    \"carColor\": \"" + userInfo.getCarColor() + "\"\n}");
+                "\"email\": \"" + userInfo.getEmail() + "\",\n    \"carMake\": \"" + userInfo.getCarMake() + "\",\n    " +
+                "\"carModel\": \"" + userInfo.getCarModel() + "\",\n    \"carColor\": \"" + userInfo.getCarColor() + "\"\n}");
 
         final Request request = new Request.Builder()
                 .url("https://eagleride2019.herokuapp.com/updateUser")
@@ -132,6 +129,47 @@ public class Networking {
                 .build();
 
         Thread thread = new Thread(new Runnable(){
+            public void run() {
+
+                try {
+                    okhttp3.Response response = client.newCall(request).execute();
+                    String jsonData = response.body().string();
+                    if (jsonData.equals("false\n")){
+                        Intent intent = new Intent(context, Menu.class);
+                        intent.putExtra("Registration", "There is an existing user with that email address");
+                        context.startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(context, Menu.class);
+                        intent.putExtra("Registration", "New user created");
+                        context.startActivity(intent);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        });
+
+        thread.start();
+    }
+
+    public void updatePassword(String password, final Context context) {
+        final OkHttpClient client = new OkHttpClient();
+
+        //userInfo.setPassword("[B@55082b1".getBytes());
+
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "{\n    \"password\": \"" + password + "\"\n}");
+
+        final Request request = new Request.Builder()
+                .url("https://eagleride2019.herokuapp.com/updatePassword")
+                .post(body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        final Thread thread = new Thread(new Runnable(){
             public void run() {
 
                 try {

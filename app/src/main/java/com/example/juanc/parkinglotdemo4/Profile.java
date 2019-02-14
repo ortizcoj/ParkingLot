@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Network.Networking;
@@ -76,11 +77,7 @@ public class Profile extends AppCompatActivity {
         colorET.setText(extras.getString("carColor"));
         brandET.setText(extras.getString("carMake"));
         modelET.setText(extras.getString("carModel"));
-        emailField.setEnabled(false);
-        nameET.setEnabled(false);
-        brandET.setEnabled(false);
-        modelET.setEnabled(false);
-        colorET.setEnabled(false);
+        disableButtons();
         changePasswordButton.setVisibility(View.VISIBLE);
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,12 +129,14 @@ public class Profile extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String oldPassword1 = inputOld.getText().toString();
                 String oldPassword2 = inputOld2.getText().toString();
-                if (oldPassword1.equals(oldPassword2) && oldPassword1.equals(password)){
+                if (oldPassword1.equals(oldPassword2) /*&& oldPassword1.equals(password)*/){
                     password = inputNew.getText().toString();
+                    //TODO here I would hash the password
+                    updatePassword();
+
+                    Toast.makeText(getApplicationContext(), "Password Updated", Toast.LENGTH_LONG).show();
                 }
-                
-                //TODO here I would hash the password
-                updatePassword();
+
 
             }
         });
@@ -153,7 +152,7 @@ public class Profile extends AppCompatActivity {
 
     private void updatePassword() {
         Networking networking = new Networking();
-        networking.updatePassword(password, getApplicationContext());
+        networking.updatePassword(emailField.getText().toString(), password, getApplicationContext());
     }
 
     private void confirmUpdateMethod() {
@@ -176,6 +175,17 @@ public class Profile extends AppCompatActivity {
 
         Networking networking = new Networking();
         networking.updateUser(userInfo, getApplicationContext());
+
+        emailField.setText(userInfo.getEmail());
+        nameET.setText(userInfo.getName());
+        colorET.setText(userInfo.getCarColor());
+        brandET.setText(userInfo.getCarMake());
+        modelET.setText(userInfo.getCarModel());
+
+        disableButtons();
+        confirm.setVisibility(View.GONE);
+
+        Toast.makeText(getApplicationContext(), "User updated", Toast.LENGTH_LONG).show();
     }
 
     private boolean setUpMapMainUI() {
@@ -240,11 +250,7 @@ public class Profile extends AppCompatActivity {
         brandET.setText(extras.getString("carMake"));
         modelET.setText(extras.getString("carModel"));
         password = extras.getString("Password");
-        emailField.setEnabled(false);
-        nameET.setEnabled(false);
-        brandET.setEnabled(false);
-        modelET.setEnabled(false);
-        colorET.setEnabled(false);
+        disableButtons();
         changePasswordButton = findViewById(R.id.changePasswordButton);
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,5 +265,13 @@ public class Profile extends AppCompatActivity {
                 confirmUpdateMethod();
             }
         });
+    }
+
+    private void disableButtons() {
+        emailField.setEnabled(false);
+        nameET.setEnabled(false);
+        brandET.setEnabled(false);
+        modelET.setEnabled(false);
+        colorET.setEnabled(false);
     }
 }

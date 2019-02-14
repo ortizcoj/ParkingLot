@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.juanc.parkinglotdemo4.Profile;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
 import com.example.juanc.parkinglotdemo4.Request.RiderDriverRequest;
 
@@ -98,7 +99,7 @@ public class Networking {
                         intent.putExtra("carModel", jsonData.split("\"")[11]);
                         intent.putExtra("Name", jsonData.split("\"")[15]);
                         intent.putExtra("Email", loginInfo.getEmail());
-                        intent.putExtra("Password", loginInfo.getPassword().toString());
+                        intent.putExtra("Password", "[B@55082b1");
                         intent.putExtra("Registration", "Welcome");
                         context.startActivity(intent);
                     }
@@ -135,13 +136,13 @@ public class Networking {
                     okhttp3.Response response = client.newCall(request).execute();
                     String jsonData = response.body().string();
                     if (jsonData.equals("false\n")){
-                        Intent intent = new Intent(context, Menu.class);
-                        intent.putExtra("Registration", "There is an existing user with that email address");
-                        context.startActivity(intent);
+//                        Intent intent = new Intent(context, Profile.class);
+//                        intent.putExtra("Update", "Update Failure");
+//                        context.startActivity(intent);
                     } else {
-                        Intent intent = new Intent(context, Menu.class);
-                        intent.putExtra("Registration", "New user created");
-                        context.startActivity(intent);
+//                        Intent intent = new Intent(context, Profile.class);
+//                        intent.putExtra("Update", "Info updated");
+//                        context.startActivity(intent);
                     }
 
                 } catch (IOException e) {
@@ -155,13 +156,13 @@ public class Networking {
         thread.start();
     }
 
-    public void updatePassword(String password, final Context context) {
+    public void updatePassword(String email, String password, final Context context) {
         final OkHttpClient client = new OkHttpClient();
 
-        //userInfo.setPassword("[B@55082b1".getBytes());
-
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\n    \"password\": \"" + password + "\"\n}");
+
+        RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + email + "\",\n  " +
+                "  \"password\": \"" + password+ "\"\n}");
 
         final Request request = new Request.Builder()
                 .url("https://eagleride2019.herokuapp.com/updatePassword")
@@ -175,15 +176,6 @@ public class Networking {
                 try {
                     okhttp3.Response response = client.newCall(request).execute();
                     String jsonData = response.body().string();
-                    if (jsonData.equals("false\n")){
-                        Intent intent = new Intent(context, Menu.class);
-                        intent.putExtra("Registration", "There is an existing user with that email address");
-                        context.startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(context, Menu.class);
-                        intent.putExtra("Registration", "New user created");
-                        context.startActivity(intent);
-                    }
 
                 } catch (IOException e) {
                     e.printStackTrace();

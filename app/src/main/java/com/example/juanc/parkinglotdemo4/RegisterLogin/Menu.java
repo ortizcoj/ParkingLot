@@ -1,5 +1,6 @@
 package com.example.juanc.parkinglotdemo4.RegisterLogin;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,9 +20,20 @@ import com.example.juanc.parkinglotdemo4.Network.Networking;
 import com.example.juanc.parkinglotdemo4.Network.User;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.Request.RiderDriverRequest;
+import com.example.juanc.parkinglotdemo4.Security.Hashing;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.util.Base64;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Menu extends AppCompatActivity {
 
@@ -138,7 +150,8 @@ public class Menu extends AppCompatActivity {
 
     private void registration() {
         try {
-            byte[] hashpass = hash(passwordED.getText().toString());
+            Hashing security = new Hashing();
+            String hashpass = security.hash(passwordED.getText().toString());
             LoginInfo loginInfo = new LoginInfo(emailED.getText().toString(), hashpass);
 
             Networking networking = new Networking();
@@ -147,12 +160,4 @@ public class Menu extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-    public byte[] hash(String password) throws NoSuchAlgorithmException {
-        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-        byte[] passBytes = password.getBytes();
-        byte[] passHash = sha256.digest(passBytes);
-        return passHash;
-    }
-
 }

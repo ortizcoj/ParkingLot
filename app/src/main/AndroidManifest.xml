@@ -35,6 +35,9 @@
         <activity android:name=".Profile"
             android:label="EagleRide">
         </activity>
+        <activity android:name=".Request.Match"
+            android:label="EagleRide">
+        </activity>
 
 
     </application>

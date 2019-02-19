@@ -34,7 +34,7 @@ public class Register2 extends AppCompatActivity {
     private EditText modelET;
     private EditText colorET;
     private String email;
-    byte[] password;
+    private String password;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -103,7 +103,7 @@ public class Register2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         email = extras.getString("Email");
-        password = extras.getByteArray("Password");
+        password = extras.getString("Password");
         setContentView(R.layout.register_2_layout);
 
         mImageView = findViewById(R.id.map);

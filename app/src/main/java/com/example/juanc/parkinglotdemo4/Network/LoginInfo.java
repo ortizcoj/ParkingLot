@@ -3,9 +3,9 @@ package com.example.juanc.parkinglotdemo4.Network;
 public class LoginInfo {
 
     private String email;
-    private byte[] password;
+    private String password;
 
-    public LoginInfo(String uemail, byte[] upassword) {
+    public LoginInfo(String uemail, String upassword) {
         email = uemail;
         password = upassword;
     }
@@ -18,11 +18,11 @@ public class LoginInfo {
         this.email = email;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 }

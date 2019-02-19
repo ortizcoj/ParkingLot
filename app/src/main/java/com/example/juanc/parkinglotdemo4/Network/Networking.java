@@ -24,11 +24,9 @@ public class Networking {
 
         final OkHttpClient client = new OkHttpClient();
 
-        userInfo.setPassword("[B@55082b1".getBytes());
-
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "{\n    \"name\": \"" + userInfo.getName() + "\",\n    " +
-                "\"email\": \"" + userInfo.getEmail() + "\",\n    \"password\": \"" + userInfo.getPassword().toString()
+                "\"email\": \"" + userInfo.getEmail() + "\",\n    \"password\": \"" + userInfo.getPassword()
                 + "\",\n    \"carMake\": \"" + userInfo.getCarMake() + "\",\n    \"carModel\": \"" + userInfo.getCarModel()
                 + "\",\n    \"carColor\": \"" + userInfo.getCarColor() + "\"\n}");
 
@@ -70,12 +68,8 @@ public class Networking {
         final OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");
-//        RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + loginInfo.getEmail() + "\",\n  " +
-//                        "  \"password\": \"" + loginInfo.getPassword().toString() + "\"\n}");
-
         RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + loginInfo.getEmail() + "\",\n  " +
-                "  \"password\": \"" + "[B@55082b1" + "\"\n}");
-
+                        "  \"password\": \"" + loginInfo.getPassword() + "\"\n}");
         final Request request = new Request.Builder()
                 .url("https://eagleride2019.herokuapp.com/loginUser")
                 .post(body)
@@ -99,7 +93,7 @@ public class Networking {
                         intent.putExtra("carModel", jsonData.split("\"")[11]);
                         intent.putExtra("Name", jsonData.split("\"")[15]);
                         intent.putExtra("Email", loginInfo.getEmail());
-                        intent.putExtra("Password", "[B@55082b1");
+                        intent.putExtra("Password", loginInfo.getPassword());
                         intent.putExtra("Registration", "Welcome");
                         context.startActivity(intent);
                     }
@@ -115,7 +109,7 @@ public class Networking {
         thread.start();
     }
 
-    public void updateUser(User userInfo, final Context context) {
+    public void updateUser(User userInfo) {
         final OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");
@@ -135,15 +129,6 @@ public class Networking {
                 try {
                     okhttp3.Response response = client.newCall(request).execute();
                     String jsonData = response.body().string();
-                    if (jsonData.equals("false\n")){
-//                        Intent intent = new Intent(context, Profile.class);
-//                        intent.putExtra("Update", "Update Failure");
-//                        context.startActivity(intent);
-                    } else {
-//                        Intent intent = new Intent(context, Profile.class);
-//                        intent.putExtra("Update", "Info updated");
-//                        context.startActivity(intent);
-                    }
 
                 } catch (IOException e) {
                     e.printStackTrace();

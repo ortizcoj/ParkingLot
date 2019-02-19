@@ -1,24 +1,16 @@
 package com.example.juanc.parkinglotdemo4.Network;
 
-import java.util.Random;
-
-import com.google.gson.*;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 
 public class User {
 
     private String name;
     private String email;
-    private byte[] password;
+    private String password;
     private String carMake;
     private String carModel;
     private String carColor;
 
-    public User(String uname, String uemail, byte[] upassword, String ucarMake, String ucarModel, String ucarColor) {
+    public User(String uname, String uemail, String upassword, String ucarMake, String ucarModel, String ucarColor) {
         name = uname;
         email = uemail;
         password = upassword;
@@ -43,11 +35,11 @@ public class User {
         this.email = email;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

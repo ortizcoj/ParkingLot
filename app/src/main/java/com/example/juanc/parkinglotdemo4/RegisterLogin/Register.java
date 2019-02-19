@@ -1,5 +1,6 @@
 package com.example.juanc.parkinglotdemo4.RegisterLogin;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -16,10 +17,19 @@ import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.R;
+import com.example.juanc.parkinglotdemo4.Security.Hashing;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.util.Base64;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Register extends AppCompatActivity {
@@ -86,14 +96,31 @@ public class Register extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Register2.class);
-//                    String pass = hash(passwordField.getText().toString());
-                intent.putExtra("Email", emailField.getText().toString());
-                intent.putExtra("Password", passwordField.getText().toString());
-                startActivity(intent);
+                performClick();
             }
         });
         return true;
+    }
+
+    private void performClick() {
+        if (!emailField.getText().toString().contains("@erau.edu") && !emailField.getText().toString().contains("@my.erau.edu") ){
+            Toast.makeText(Register.this, "Email must be an ERAU email account", Toast.LENGTH_SHORT).show();
+        } else if (!passwordField.getText().toString().equals(confirmPasswordField.getText().toString())){
+            Toast.makeText(Register.this, "Passwords aren't matching", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(getApplicationContext(), Register2.class);
+            intent.putExtra("Email", emailField.getText().toString());
+            try {
+                Hashing security = new Hashing();
+                String hashpass = security.hash(passwordField.getText().toString());
+
+                intent.putExtra("Password", hashpass);
+                startActivity(intent);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
 
@@ -119,31 +146,10 @@ public class Register extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!emailField.getText().toString().contains("@erau.edu") && !emailField.getText().toString().contains("@my.erau.edu") ){
-                    Toast.makeText(Register.this, "Email must be an ERAU email account", Toast.LENGTH_SHORT).show();
-                } else if (!passwordField.getText().toString().equals(confirmPasswordField.getText().toString())){
-                    Toast.makeText(Register.this, "Passwords aren't matching", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = new Intent(getApplicationContext(), Register2.class);
-                    intent.putExtra("Email", emailField.getText().toString());
-//                        String hashpass = hash(passwordField.getText().toString());
-
-                    intent.putExtra("Password", passwordField.getText().toString());
-                    startActivity(intent);
-
-                }
+                performClick();
             }
         });
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
-
-//    public String hash(String password) throws NoSuchAlgorithmException {
-//        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-//        byte[] passBytes = password.getBytes();
-//        sha256.update(passBytes);
-//        byte[] passHash = sha256.digest(passBytes);
-//        String strHashpass = passHash.toString();
-//        return strHashpass;
-//    }
 }

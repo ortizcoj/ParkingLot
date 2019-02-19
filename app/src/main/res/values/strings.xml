@@ -25,4 +25,7 @@
     <string name="EnterPassword">Enter old password</string>
     <string name="ConfirmPassword">Confirm old password</string>
     <string name="NewPassword">Enter new password</string>
+    <string name="match_info">Match Info</string>
+    <string name="complete_ride">Complete</string>
+    <string name="cancel">Cancel</string>
 </resources>

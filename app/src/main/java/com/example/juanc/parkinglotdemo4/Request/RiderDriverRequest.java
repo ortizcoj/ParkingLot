@@ -6,10 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,7 +19,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -56,20 +60,27 @@ public class RiderDriverRequest extends AppCompatActivity {
     private ProgressBar pb;
     private Button firstTimeButton;
     private Button secondTimeButton;
-    private int pickupHourEarly;
-    private int pickupMinEarly;
-    private int pickupHourLate;
-    private int pickupMinLate;
+    private String pickupHourEarly;
+    private String pickupMinEarly;
+    private String pickupHourLate;
+    private String pickupMinLate;
     private TextView and;
     String email;
     String startTime = "";
     String endTime = "";
-    private Socket realSocket;
+    private static Socket realSocket;
     private String name = "";
     private String carColor = "";
     private String carMake = "";
     private String carModel = "";
     private String password = "";
+    private String matchName = null;
+    private String matchTime;
+    private String pickupLot;
+    private String dropoffLot;
+    private String matchCarMake = null;
+    private String matchCarModel = null;
+    private String matchCarColor = null;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -193,6 +204,12 @@ public class RiderDriverRequest extends AppCompatActivity {
         } else {
             sendDriverRequest(request, body);
         }
+        while (matchName==null){
+
+        }
+
+        pb.setVisibility(View.GONE);
+        matchMade(matchName, matchTime, pickupLot, dropoffLot, matchCarMake, matchCarModel, matchCarColor);
     }
 
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
@@ -204,6 +221,16 @@ public class RiderDriverRequest extends AppCompatActivity {
                     JSONObject json = new JSONObject();
                     try {
                         json.put("Stuff", args[0]);
+
+                        matchTime = ((String) args[0]).split("\"")[7];
+                        pickupLot = ((String) args[0]).split("\"")[11];
+                        dropoffLot = ((String) args[0]).split("\"")[15];
+                        if (((String) args[0]).contains("carMake")){
+                            carMake = ((String) args[0]).split("\"")[19];
+                            carModel = ((String) args[0]).split("\"")[23];
+                            carColor = ((String) args[0]).split("\"")[27];
+                        }
+                        matchName = ((String) args[0]).split("\"")[3];
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -212,12 +239,13 @@ public class RiderDriverRequest extends AppCompatActivity {
             thread.start();
         }
     };
+
     private void sendDriverRequest(Request request, final JSONObject body) {
         try {
             body.put("email", request.getEmail());
             body.put("startTime", request.getStartTime());
             body.put("endTime", request.getEndTime());
-            body.put("dropoffLot", request.getDropoffLot());
+            body.put("lot", request.getDropoffLot());
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -235,8 +263,8 @@ public class RiderDriverRequest extends AppCompatActivity {
             body.put("email", request.getEmail());
             body.put("startTime", request.getStartTime());
             body.put("endTime", request.getEndTime());
-            body.put("pickupLocation", request.getPickupLocation());
-            body.put("dropoffLot", request.getDropoffLot());
+            body.put("pickup", request.getPickupLocation());
+            body.put("lot", request.getDropoffLot());
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -250,8 +278,20 @@ public class RiderDriverRequest extends AppCompatActivity {
     }
 
     private void convertToTimes() {
-        startTime = "" + pickupHourEarly + pickupMinEarly;
-        endTime = "" + pickupHourLate + pickupMinLate;
+        if (String.valueOf(pickupMinLate).length()==1){
+            pickupMinLate = 0 + pickupMinLate;
+        }
+        if (String.valueOf(pickupHourLate).length()==1){
+            pickupHourLate = 0 + pickupHourLate;
+        }
+        if (String.valueOf(pickupHourEarly).length()==1){
+            pickupHourEarly = 0 + pickupHourEarly;
+        }
+        if (String.valueOf(pickupMinEarly).length()==1){
+            pickupMinEarly = 0 + pickupMinEarly;
+        }
+        startTime = pickupHourEarly + pickupMinEarly;
+        endTime = pickupHourLate + pickupMinLate;
     }
 
     @Override
@@ -337,8 +377,8 @@ public class RiderDriverRequest extends AppCompatActivity {
                                         .getCurrentMinute().toString();
 
                                 Toast.makeText(RiderDriverRequest.this, currentHourText + ":" + currentMinuteText, Toast.LENGTH_SHORT).show();
-                                pickupHourEarly = Integer.valueOf(currentHourText);
-                                pickupMinEarly = Integer.valueOf(currentMinuteText);
+                                pickupHourEarly = currentHourText;
+                                pickupMinEarly = currentMinuteText;
                                 firstTimeButton.setText(new StringBuilder().append(pickupHourEarly).append(":").append(pickupMinEarly).toString());
 
                                 dialog.cancel();
@@ -372,8 +412,8 @@ public class RiderDriverRequest extends AppCompatActivity {
                                         .getCurrentMinute().toString();
 
                                 Toast.makeText(RiderDriverRequest.this, currentHourText + ":" + currentMinuteText, Toast.LENGTH_SHORT).show();
-                                pickupHourLate = Integer.valueOf(currentHourText);
-                                pickupMinLate = Integer.valueOf(currentMinuteText);
+                                pickupHourLate = currentHourText;
+                                pickupMinLate = currentMinuteText;
                                 secondTimeButton.setText(new StringBuilder().append(pickupHourLate).append(":").append(pickupMinLate).toString());
 
                                 dialog.cancel();
@@ -403,5 +443,71 @@ public class RiderDriverRequest extends AppCompatActivity {
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    private void matchMade(final String matchName, final String matchTime, final String matchPickupLot,
+                           final String matchDropoffLot, final String matchCarMake, final String matchCarModel, final String matchCarColor) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        builder.setTitle("MATCH FOUND!");
+
+        final TextView name = new TextView(this);
+        name.setText(matchName);
+        name.setPadding(0,10,0,10);
+        final TextView time = new TextView(this);
+        time.setText(matchTime);
+        time.setPadding(0,10,0,10);
+        final TextView pickupLot = new TextView(this);
+        pickupLot.setText(matchPickupLot);
+        pickupLot.setPadding(0,10,0,10);
+        final TextView dropoffLot = new TextView(this);
+        dropoffLot.setText(matchDropoffLot);
+        dropoffLot.setPadding(0,10,0,10);
+
+        layout.addView(name);
+        layout.addView(time);
+        layout.addView(pickupLot);
+        layout.addView(dropoffLot);
+        if (matchCarMake!=null){
+            final TextView carMake = new TextView(this);
+            carMake.setText(matchCarMake);
+            carMake.setPadding(0,10,0,10);
+            final TextView carModel = new TextView(this);
+            carModel.setText(matchCarModel);
+            carModel.setPadding(0,10,0,10);
+            final TextView carColor = new TextView(this);
+            carColor.setText(matchCarColor);
+            carColor.setPadding(0,10,0,10);
+
+            layout.addView(carMake);
+            layout.addView(carModel);
+            layout.addView(carColor);
+        }
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Intent intent = new Intent(getApplicationContext(), Match.class);
+                intent.putExtra("Email", email);
+                intent.putExtra("carColor", matchCarColor);
+                intent.putExtra("carMake", matchCarMake);
+                intent.putExtra("carModel", matchCarModel);
+                intent.putExtra("Name", matchName);
+                intent.putExtra("Time", matchTime);
+                intent.putExtra("Pickup", matchPickupLot);
+                intent.putExtra("Dropoff", matchDropoffLot);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("socket", (Parcelable) realSocket);
+
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        builder.show();
     }
 }

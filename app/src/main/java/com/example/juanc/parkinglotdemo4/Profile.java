@@ -1,5 +1,6 @@
 package com.example.juanc.parkinglotdemo4;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -21,6 +22,14 @@ import android.widget.Toast;
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Network.Networking;
 import com.example.juanc.parkinglotdemo4.Network.User;
+import com.example.juanc.parkinglotdemo4.Security.Hashing;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Profile extends AppCompatActivity {
 
@@ -129,12 +138,16 @@ public class Profile extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String oldPassword1 = inputOld.getText().toString();
                 String oldPassword2 = inputOld2.getText().toString();
-                if (oldPassword1.equals(oldPassword2) /*&& oldPassword1.equals(password)*/){
-                    password = inputNew.getText().toString();
-                    //TODO here I would hash the password
-                    updatePassword();
+                try {
+                    Hashing security = new Hashing();
+                    if (oldPassword1.equals(oldPassword2) && security.hash(oldPassword1).equals(password)){
+                        password = inputNew.getText().toString();
+                        updatePassword();
 
-                    Toast.makeText(getApplicationContext(), "Password Updated", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Password Updated", Toast.LENGTH_LONG).show();
+                    }
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
                 }
 
 
@@ -170,11 +183,10 @@ public class Profile extends AppCompatActivity {
     }
 
     private void updateUser() {
-        //TODO send info to server
-        User userInfo = new User(nameET.getText().toString(), emailField.getText().toString(), "hsaf".getBytes(), brandET.getText().toString(), modelET.getText().toString(), colorET.getText().toString());
+        User userInfo = new User(nameET.getText().toString(), emailField.getText().toString(), password, brandET.getText().toString(), modelET.getText().toString(), colorET.getText().toString());
 
         Networking networking = new Networking();
-        networking.updateUser(userInfo, getApplicationContext());
+        networking.updateUser(userInfo);
 
         emailField.setText(userInfo.getEmail());
         nameET.setText(userInfo.getName());
@@ -274,4 +286,5 @@ public class Profile extends AppCompatActivity {
         modelET.setEnabled(false);
         colorET.setEnabled(false);
     }
+
 }

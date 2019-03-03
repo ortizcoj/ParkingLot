@@ -21,8 +21,8 @@ public class LotDisplay extends AppCompatActivity {
         setContentView(R.layout.content_main);
         populateSpotsArray();
         setAllSpotsAvailable();
-        spots[5].setVisibility(View.VISIBLE);
-        spots[2].setVisibility(View.VISIBLE);
+//        spots[5].setVisibility(View.VISIBLE);
+//        spots[2].setVisibility(View.VISIBLE);
         spots[0].setVisibility(View.VISIBLE);
     }
 

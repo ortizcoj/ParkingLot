@@ -21,61 +21,91 @@
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:spotID="0"
-        android:id="@+id/spot0"/>
+        android:id="@+id/spot0"
+        app:height="14dp"
+        app:width="33dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="344dp"/>
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:spotID="1"
-        android:id="@+id/spot1"/>
+        android:id="@+id/spot1"
+        app:height="14dp"
+        app:width="33dp"
+        android:layout_marginTop="266dp"
+        android:layout_marginLeft="344dp"/>
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:spotID="2"
-        android:id="@+id/spot2"/>
+        android:id="@+id/spot2"
+        app:height="14dp"
+        app:width="33dp"
+        android:layout_marginTop="282dp"
+        android:layout_marginLeft="344dp"/>
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:spotID="3"
-        android:id="@+id/spot3"/>
+        android:id="@+id/spot3"
+        app:height="14dp"
+        app:width="33dp"
+        android:layout_marginTop="298dp"
+        android:layout_marginLeft="344dp"/>
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:spotID="4"
-        android:id="@+id/spot4"/>
+        android:id="@+id/spot4"
+        app:height="14dp"
+        app:width="33dp"
+        android:layout_marginTop="314dp"
+        android:layout_marginLeft="344dp"/>
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:spotID="5"
-        android:id="@+id/spot5"/>
+        android:id="@+id/spot5"
+        app:height="14dp"
+        app:width="33dp"
+        android:layout_marginTop="330dp"
+        android:layout_marginLeft="344dp"/>
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:spotID="6"
-        android:id="@+id/spot6"/>
+        android:id="@+id/spot6"
+        app:height="14dp"
+        app:width="33dp"
+        android:layout_marginTop="346dp"
+        android:layout_marginLeft="344dp"/>
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:spotID="7"
-        android:id="@+id/spot7"/>
+        android:id="@+id/spot7"
+        app:height="14dp"
+        app:width="33dp"
+        android:layout_marginTop="362dp"
+        android:layout_marginLeft="344dp"/>
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:spotID="8"
-        android:id="@+id/spot8"/>
+        android:id="@+id/spot8"
+        app:height="14dp"
+        app:width="33dp"
+        android:layout_marginTop="378dp"
+        android:layout_marginLeft="344dp"/>
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:spotID="9"
-        android:id="@+id/spot9"/>
+        android:id="@+id/spot9"
+        app:height="14dp"
+        app:width="33dp"
+        android:layout_marginTop="394dp"
+        android:layout_marginLeft="344dp"/>
 
 </RelativeLayout>

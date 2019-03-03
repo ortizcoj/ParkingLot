@@ -108,7 +108,6 @@ public class RiderDriverRequest extends AppCompatActivity {
         pickupDropDown.setVisibility(View.GONE);
         and.setVisibility(View.GONE);
         next.setVisibility(View.GONE);
-        firstTimeButton.setVisibility(View.GONE);
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
         firstTimeButton.setVisibility(View.GONE);
@@ -200,8 +199,10 @@ public class RiderDriverRequest extends AppCompatActivity {
         realSocket.connect();
         final JSONObject body = new JSONObject();
         if (!requestSwitch.isChecked()){
+            disableButtons();
             sendRiderRequest(request, body);
         } else {
+            disableButtons();
             sendDriverRequest(request, body);
         }
         while (matchName==null){
@@ -210,6 +211,14 @@ public class RiderDriverRequest extends AppCompatActivity {
 
         pb.setVisibility(View.GONE);
         matchMade(matchName, matchTime, pickupLot, dropoffLot, matchCarMake, matchCarModel, matchCarColor);
+    }
+
+    private void disableButtons() {
+        requestSwitch.setFocusable(false);
+        dropoffDropDown.setFocusable(false);
+        pickupDropDown.setFocusable(false);
+        firstTimeButton.setFocusable(false);
+        secondTimeButton.setFocusable(false);
     }
 
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
@@ -501,10 +510,6 @@ public class RiderDriverRequest extends AppCompatActivity {
                 intent.putExtra("Time", matchTime);
                 intent.putExtra("Pickup", matchPickupLot);
                 intent.putExtra("Dropoff", matchDropoffLot);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("socket", (Parcelable) realSocket);
-
-                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

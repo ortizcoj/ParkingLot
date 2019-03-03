@@ -15,9 +15,8 @@ import com.example.juanc.parkinglotdemo4.R;
 public class Spot extends View {
     private Rect rectangle;
     private Paint paint;
-    private static final int WIDTH = 86;
-    private static final int HEIGHT = 37;
-    private int spot;
+    private float width;
+    private float height;
 
 
     public Spot(Context context){
@@ -46,16 +45,17 @@ public class Spot extends View {
         }
 
         TypedArray typedArray = getContext().obtainStyledAttributes(set, R.styleable.Spot);
-        spot = typedArray.getInteger(R.styleable.Spot_spotID,0);
+        width = typedArray.getDimension(R.styleable.Spot_width,0);
+        height = typedArray.getDimension(R.styleable.Spot_height,0);
         typedArray.recycle();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        rectangle.left = 902;
-        rectangle.top = 655 + (spot*HEIGHT) + (spot*5);
-        rectangle.right = rectangle.left + WIDTH;
-        rectangle.bottom = rectangle.top + HEIGHT;
+        rectangle.left = 0;
+        rectangle.top = 0;
+        rectangle.right = (int) width;
+        rectangle.bottom = (int)height;
 
         canvas.drawRect(rectangle,paint);
     }

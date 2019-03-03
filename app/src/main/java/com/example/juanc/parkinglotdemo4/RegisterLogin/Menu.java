@@ -71,8 +71,8 @@ public class Menu extends AppCompatActivity {
         register.setVisibility(View.GONE);
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
-        citationLot.setX(200);
-        citationLot.setY(850);
+//        citationLot.setX(200);
+//        citationLot.setY(850);
         citationLot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

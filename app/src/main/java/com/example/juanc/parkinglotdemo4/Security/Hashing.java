@@ -18,7 +18,6 @@ public class Hashing {
 
         String hex = String.format("%064x", new BigInteger(1, digest));
 
-
         return hex;
     }
 }

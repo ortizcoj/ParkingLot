@@ -146,22 +146,29 @@
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/map"
-        app:layout_constraintBottom_toTopOf="@id/navigation"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/map"/>
+        app:layout_constraintBottom_toBottomOf="@id/navigation">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/citation"
-        android:src="@drawable/citation_lot_map1"
-        app:layout_constraintBottom_toBottomOf="@id/navigation"
-        android:background="@null"/>
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/map"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/map"/>
+
+        <ImageView
+            android:id="@+id/citation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="350dp"
+            android:layout_marginStart="77dp"
+            android:background="@null"
+            android:src="@drawable/citation_lot_map1" />
+
+    </RelativeLayout>
 
     <ProgressBar
         android:layout_width="150dp"

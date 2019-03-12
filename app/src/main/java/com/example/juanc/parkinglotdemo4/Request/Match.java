@@ -1,5 +1,6 @@
 package com.example.juanc.parkinglotdemo4.Request;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,9 +11,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.juanc.parkinglotdemo4.Network.Request;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.Sockets;
+import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONException;
@@ -32,6 +33,19 @@ public class Match extends AppCompatActivity {
     private Button complete;
     private Button cancel;
     private Socket realSocket;
+    private boolean rideComplete = false;
+    private boolean rideCancel = false;
+    private boolean newMatch = false;
+    private String matchTime = null;
+    private String sPickup = "";
+    private String sDropoff = "";
+    private String carMake = "";
+    private String carModel = "";
+    private String carColor = null;
+    private String matchName = "";
+
+
+    //TODO fix time
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -68,7 +82,7 @@ public class Match extends AppCompatActivity {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            realSocket.emit("get_completed_match", body);
+                            realSocket.emit("send_completed_match", body);
                         }
                     });
                     thread.start();
@@ -87,7 +101,7 @@ public class Match extends AppCompatActivity {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            realSocket.emit("get_cancelled_match", body);
+                            realSocket.emit("send_cancelled_match", body);
                         }
                     });
                     thread.start();
@@ -127,8 +141,6 @@ public class Match extends AppCompatActivity {
         mImageView.setVisibility(View.INVISIBLE);
         citationLot = findViewById(R.id.citation);
         citationLot.setVisibility(View.INVISIBLE);
-        realSocket = extras.getParcelable("socket");
-//        createSocket();
 
         name = findViewById(R.id.name);
         time = findViewById(R.id.time);
@@ -147,7 +159,7 @@ public class Match extends AppCompatActivity {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            realSocket.emit("get_completed_match", body);
+                            realSocket.emit("send_completed_match", body);
                         }
                     });
                     thread.start();
@@ -160,6 +172,7 @@ public class Match extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("email", email);
@@ -173,26 +186,139 @@ public class Match extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
+                startActivity(intent);
+
             }
         });
 
         email = extras.getString("Email");
-        name.setText("Name: " + extras.getString("Name"));
+        matchName = extras.getString("Name");
         String time1 = extras.getString("Time");
-        time1 = time1.substring(0,1) + ":" + time1.substring(2,3);
-        time.setText("Time : " + time1);
-        pickupLot.setText("Pick up lot: " + extras.getString("Pickup"));
-        dropoffLot.setText("Drop off lot: " + extras.getString("Dropoff"));
-        if (extras.getString("carColor")!=null){
-            color.setText("Car color: " + extras.getString("carColor"));
-            brand.setText("Car make: " + extras.getString("carMake"));
-            model.setText("Car model : " + extras.getString("carModel"));
+        matchTime = time1.substring(0,1) + ":" + time1.substring(2,3);
+        sPickup = extras.getString("Pickup");
+        sDropoff = extras.getString("Dropoff");
+        if (extras.getString("carColor")!=null) {
+            carColor = extras.getString("carColor");
+            carMake = extras.getString("carMake");
+            carModel = extras.getString("carModel");
+        }
+
+        updateFields();
+
+        createSocket();
+        sendNewID();
+
+//        waitForAction();
+
+//        while(!rideComplete || !rideCancel){
+//            if (rideCancel){
+//                Toast.makeText(getApplicationContext(), "Your ride was cancelled, looking for a " +
+//                        "new match", Toast.LENGTH_LONG).show();
+//            }
+//            if (rideComplete){
+//                Toast.makeText(getApplicationContext(), "Ride completed! Hope you enjoyed our service"
+//                        , Toast.LENGTH_LONG).show();
+//
+//                Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
+//                startActivity(intent);
+//            }
+//
+//        }
+    }
+
+    private void updateFields() {
+        name.setText("Name: " + matchName);
+        time.setText("Time : " + matchTime);
+        pickupLot.setText("Pick up lot: " + sPickup);
+        dropoffLot.setText("Drop off lot: " + sDropoff);
+        if (carColor!=null){
+            color.setText("Car color: " + carColor);
+            brand.setText("Car make: " + carMake);
+            model.setText("Car model : " + carModel);
+        }
+    }
+
+    private void waitForAction() {
+        while (true){
+            if (newMatch){
+                updateFields();
+                newMatch=false;
+            }
+        }
+    }
+
+    private void sendNewID() {
+        final JSONObject sessionBody = new JSONObject();
+        try {
+            sessionBody.put("email", email);
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    realSocket.emit("update_match_session_id", sessionBody);
+                }
+            });
+            thread.start();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
     private void createSocket(){
         Sockets socket = new Sockets();
         realSocket = socket.getSocket();
+        realSocket.on("match_cancelled", onMatchCancelled);
+        realSocket.on("get_rider_match", onNewMessage);
+        realSocket.on("get_driver_match", onNewMessage);
         realSocket.connect();
     }
+
+    @Override
+    protected void onDestroy() {
+        realSocket.close();
+        super.onDestroy();
+    }
+
+    private Emitter.Listener onMatchCancelled = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    rideCancel = true;
+                }
+            });
+            thread.start();
+        }
+    };
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            Thread thread = new Thread(new Runnable() {
+                //TODO set new text
+                @Override
+                public void run() {
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("Stuff", args[0]);
+
+                        matchTime = ((String) args[0]).split("\"")[7];
+                        sPickup = ((String) args[0]).split("\"")[11];
+                        sDropoff = ((String) args[0]).split("\"")[15];
+                        if (((String) args[0]).contains("carMake")){
+                            carMake = ((String) args[0]).split("\"")[19];
+                            carModel = ((String) args[0]).split("\"")[23];
+                            carColor = ((String) args[0]).split("\"")[27];
+                        }
+                        matchName = ((String) args[0]).split("\"")[3];
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+        }
+    };
 }

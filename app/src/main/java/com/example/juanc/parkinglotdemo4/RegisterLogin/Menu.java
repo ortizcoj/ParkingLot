@@ -1,6 +1,5 @@
 package com.example.juanc.parkinglotdemo4.RegisterLogin;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,23 +16,10 @@ import android.widget.Toast;
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Network.LoginInfo;
 import com.example.juanc.parkinglotdemo4.Network.Networking;
-import com.example.juanc.parkinglotdemo4.Network.User;
 import com.example.juanc.parkinglotdemo4.R;
-import com.example.juanc.parkinglotdemo4.Request.RiderDriverRequest;
 import com.example.juanc.parkinglotdemo4.Security.Hashing;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.util.Base64;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 public class Menu extends AppCompatActivity {
 
@@ -46,6 +32,8 @@ public class Menu extends AppCompatActivity {
     private Button register;
     private Button login;
     private String regUser;
+
+    //TODO log out feature
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -71,8 +59,6 @@ public class Menu extends AppCompatActivity {
         register.setVisibility(View.GONE);
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
-//        citationLot.setX(200);
-//        citationLot.setY(850);
         citationLot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -88,7 +88,7 @@
         android:id="@+id/and"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="and"
+        android:text="to"
         android:textSize="12pt"
         app:layout_constraintTop_toBottomOf="@id/time"
         app:layout_constraintLeft_toRightOf="@id/timeButton"
@@ -169,10 +169,4 @@
             android:src="@drawable/citation_lot_map1" />
 
     </RelativeLayout>
-
-    <ProgressBar
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/ProgressBar"/>
-
 </android.support.constraint.ConstraintLayout>

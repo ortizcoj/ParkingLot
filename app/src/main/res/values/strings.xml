@@ -10,8 +10,8 @@
     <string name="email">Email</string>
     <string name="eagleRide">Eagle Ride</string>
     <string name="requestType">Type of request?</string>
-    <string name="time">Between what times would you want to do the pick up to be at?</string>
-    <string name="dropoff_location">dropoff Location</string>
+    <string name="time">Between what times do you want the pick up to be?</string>
+    <string name="dropoff_location">Drop off Location</string>
     <string name="pick_up">Pick up</string>
     <string name="name">Name</string>
     <string name="brand">Brand</string>
@@ -28,4 +28,5 @@
     <string name="match_info">Match Info</string>
     <string name="complete_ride">Complete</string>
     <string name="cancel">Cancel</string>
+    <string name="request_info">Request Info</string>
 </resources>

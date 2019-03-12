@@ -6,42 +6,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Network.Request;
 import com.example.juanc.parkinglotdemo4.Profile;
 import com.example.juanc.parkinglotdemo4.R;
-import com.example.juanc.parkinglotdemo4.Sockets;
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 public class RiderDriverRequest extends AppCompatActivity {
 
@@ -57,7 +44,6 @@ public class RiderDriverRequest extends AppCompatActivity {
     private Button profile;
     private ImageView mImageView;
     private ImageView citationLot;
-    private ProgressBar pb;
     private Button firstTimeButton;
     private Button secondTimeButton;
     private String pickupHourEarly;
@@ -68,19 +54,12 @@ public class RiderDriverRequest extends AppCompatActivity {
     String email;
     String startTime = "";
     String endTime = "";
-    private static Socket realSocket;
     private String name = "";
     private String carColor = "";
     private String carMake = "";
     private String carModel = "";
     private String password = "";
-    private String matchName = null;
-    private String matchTime;
-    private String pickupLot;
-    private String dropoffLot;
-    private String matchCarMake = null;
-    private String matchCarModel = null;
-    private String matchCarColor = null;
+    private boolean sent = false;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -130,6 +109,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         requestType.setVisibility(View.VISIBLE);
         timeTV.setVisibility(View.VISIBLE);
         firstTimeButton.setVisibility(View.VISIBLE);
+        secondTimeButton.setVisibility(View.VISIBLE);
         dropoff.setVisibility(View.VISIBLE);
         pickup.setVisibility(View.VISIBLE);
         pickupDropDown.setVisibility(View.VISIBLE);
@@ -180,9 +160,7 @@ public class RiderDriverRequest extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 convertToTimes();
-                sendRequest();
-                Toast.makeText(RiderDriverRequest.this, "Looking for a match", Toast.LENGTH_SHORT).show();
-                pb.setVisibility(View.VISIBLE);
+                openWaiting();
             }
         });
         mImageView.setVisibility(View.GONE);
@@ -190,100 +168,18 @@ public class RiderDriverRequest extends AppCompatActivity {
         return true;
     }
 
-    private void sendRequest() {
-        Request request = new Request(email, startTime, endTime, pickupDropDown.getSelectedItem().toString(), dropoffDropDown.getSelectedItem().toString());
-        Sockets socket = new Sockets();
-        realSocket = socket.getSocket();
-        realSocket.on("get_rider_match", onNewMessage);
-        realSocket.on("get_driver_match", onNewMessage);
-        realSocket.connect();
-        final JSONObject body = new JSONObject();
+    private void openWaiting() {
+        Intent intent = new Intent(getApplicationContext(), WaitingToMatch.class);
+        intent.putExtra("Email", email);
+        intent.putExtra("Time1", startTime);
+        intent.putExtra("Time2", endTime);
+        intent.putExtra("Dropoff", dropoffDropDown.getSelectedItem().toString());
         if (!requestSwitch.isChecked()){
-            disableButtons();
-            sendRiderRequest(request, body);
+            intent.putExtra("Pickup", pickupDropDown.getSelectedItem().toString());
         } else {
-            disableButtons();
-            sendDriverRequest(request, body);
+            intent.putExtra("Pickup", "0");
         }
-        while (matchName==null){
-
-        }
-
-        pb.setVisibility(View.GONE);
-        matchMade(matchName, matchTime, pickupLot, dropoffLot, matchCarMake, matchCarModel, matchCarColor);
-    }
-
-    private void disableButtons() {
-        requestSwitch.setFocusable(false);
-        dropoffDropDown.setFocusable(false);
-        pickupDropDown.setFocusable(false);
-        firstTimeButton.setFocusable(false);
-        secondTimeButton.setFocusable(false);
-    }
-
-    private Emitter.Listener onNewMessage = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject json = new JSONObject();
-                    try {
-                        json.put("Stuff", args[0]);
-
-                        matchTime = ((String) args[0]).split("\"")[7];
-                        pickupLot = ((String) args[0]).split("\"")[11];
-                        dropoffLot = ((String) args[0]).split("\"")[15];
-                        if (((String) args[0]).contains("carMake")){
-                            carMake = ((String) args[0]).split("\"")[19];
-                            carModel = ((String) args[0]).split("\"")[23];
-                            carColor = ((String) args[0]).split("\"")[27];
-                        }
-                        matchName = ((String) args[0]).split("\"")[3];
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            thread.start();
-        }
-    };
-
-    private void sendDriverRequest(Request request, final JSONObject body) {
-        try {
-            body.put("email", request.getEmail());
-            body.put("startTime", request.getStartTime());
-            body.put("endTime", request.getEndTime());
-            body.put("lot", request.getDropoffLot());
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    realSocket.emit("send_drive_request", body);
-                }
-            });
-            thread.start();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void sendRiderRequest(Request request, final JSONObject body) {
-        try {
-            body.put("email", request.getEmail());
-            body.put("startTime", request.getStartTime());
-            body.put("endTime", request.getEndTime());
-            body.put("pickup", request.getPickupLocation());
-            body.put("lot", request.getDropoffLot());
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    realSocket.emit("send_ride_request", body);
-                }
-            });
-            thread.start();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        startActivity(intent);
     }
 
     private void convertToTimes() {
@@ -361,8 +257,6 @@ public class RiderDriverRequest extends AppCompatActivity {
         });
         timeTV = findViewById(R.id.time);
         dropoff = findViewById(R.id.dropoff);
-        pb = findViewById(R.id.ProgressBar);
-        pb.setVisibility(View.GONE);
         firstTimeButton = findViewById(R.id.timeButton);
         firstTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -385,7 +279,6 @@ public class RiderDriverRequest extends AppCompatActivity {
                                 String currentMinuteText = myTimePicker
                                         .getCurrentMinute().toString();
 
-                                Toast.makeText(RiderDriverRequest.this, currentHourText + ":" + currentMinuteText, Toast.LENGTH_SHORT).show();
                                 pickupHourEarly = currentHourText;
                                 pickupMinEarly = currentMinuteText;
                                 firstTimeButton.setText(new StringBuilder().append(pickupHourEarly).append(":").append(pickupMinEarly).toString());
@@ -420,7 +313,6 @@ public class RiderDriverRequest extends AppCompatActivity {
                                 String currentMinuteText = myTimePicker
                                         .getCurrentMinute().toString();
 
-                                Toast.makeText(RiderDriverRequest.this, currentHourText + ":" + currentMinuteText, Toast.LENGTH_SHORT).show();
                                 pickupHourLate = currentHourText;
                                 pickupMinLate = currentMinuteText;
                                 secondTimeButton.setText(new StringBuilder().append(pickupHourLate).append(":").append(pickupMinLate).toString());
@@ -444,75 +336,11 @@ public class RiderDriverRequest extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 convertToTimes();
-                sendRequest();
-                Toast.makeText(RiderDriverRequest.this, "Looking for a match", Toast.LENGTH_SHORT).show();
-                pb.setVisibility(View.VISIBLE);
+                openWaiting();
             }
         });
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
-
-    private void matchMade(final String matchName, final String matchTime, final String matchPickupLot,
-                           final String matchDropoffLot, final String matchCarMake, final String matchCarModel, final String matchCarColor) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        builder.setTitle("MATCH FOUND!");
-
-        final TextView name = new TextView(this);
-        name.setText(matchName);
-        name.setPadding(0,10,0,10);
-        final TextView time = new TextView(this);
-        time.setText(matchTime);
-        time.setPadding(0,10,0,10);
-        final TextView pickupLot = new TextView(this);
-        pickupLot.setText(matchPickupLot);
-        pickupLot.setPadding(0,10,0,10);
-        final TextView dropoffLot = new TextView(this);
-        dropoffLot.setText(matchDropoffLot);
-        dropoffLot.setPadding(0,10,0,10);
-
-        layout.addView(name);
-        layout.addView(time);
-        layout.addView(pickupLot);
-        layout.addView(dropoffLot);
-        if (matchCarMake!=null){
-            final TextView carMake = new TextView(this);
-            carMake.setText(matchCarMake);
-            carMake.setPadding(0,10,0,10);
-            final TextView carModel = new TextView(this);
-            carModel.setText(matchCarModel);
-            carModel.setPadding(0,10,0,10);
-            final TextView carColor = new TextView(this);
-            carColor.setText(matchCarColor);
-            carColor.setPadding(0,10,0,10);
-
-            layout.addView(carMake);
-            layout.addView(carModel);
-            layout.addView(carColor);
-        }
-
-        builder.setView(layout);
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Intent intent = new Intent(getApplicationContext(), Match.class);
-                intent.putExtra("Email", email);
-                intent.putExtra("carColor", matchCarColor);
-                intent.putExtra("carMake", matchCarMake);
-                intent.putExtra("carModel", matchCarModel);
-                intent.putExtra("Name", matchName);
-                intent.putExtra("Time", matchTime);
-                intent.putExtra("Pickup", matchPickupLot);
-                intent.putExtra("Dropoff", matchDropoffLot);
-                startActivity(intent);
-            }
-        });
-        builder.show();
     }
 }

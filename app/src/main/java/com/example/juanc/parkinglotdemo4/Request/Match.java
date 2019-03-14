@@ -234,7 +234,7 @@ public class Match extends AppCompatActivity {
         pickupLot.setText("Pick up lot: " + sPickup);
         dropoffLot.setText("Drop off lot: " + sDropoff);
         if (carColor!=null){
-            color.setText("Car color: " + carColor);
+            color.setText("Car color: "  + carColor);
             brand.setText("Car make: " + carMake);
             model.setText("Car model : " + carModel);
         }

@@ -95,6 +95,7 @@ public class Networking {
                         intent.putExtra("Email", loginInfo.getEmail());
                         intent.putExtra("Password", loginInfo.getPassword());
                         intent.putExtra("Registration", "Welcome");
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
 

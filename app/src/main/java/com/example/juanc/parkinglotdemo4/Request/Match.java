@@ -196,7 +196,7 @@ public class Match extends AppCompatActivity {
         email = extras.getString("Email");
         matchName = extras.getString("Name");
         String time1 = extras.getString("Time");
-        matchTime = time1.substring(0,1) + ":" + time1.substring(2,3);
+        matchTime = time1.substring(0,2) + ":" + time1.substring(2,4);
         sPickup = extras.getString("Pickup");
         sDropoff = extras.getString("Dropoff");
         if (extras.getString("carColor")!=null) {

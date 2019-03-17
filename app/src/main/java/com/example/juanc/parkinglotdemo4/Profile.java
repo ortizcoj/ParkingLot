@@ -1,6 +1,5 @@
 package com.example.juanc.parkinglotdemo4;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -22,14 +21,10 @@ import android.widget.Toast;
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Network.Networking;
 import com.example.juanc.parkinglotdemo4.Network.User;
+import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
 import com.example.juanc.parkinglotdemo4.Security.Hashing;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 public class Profile extends AppCompatActivity {
 
@@ -50,6 +45,7 @@ public class Profile extends AppCompatActivity {
     private Button confirm;
     private String password = "";
     private Button changePasswordButton;
+    private Button logout;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -92,6 +88,16 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 changePassword();
+            }
+        });
+        logout.setVisibility(View.VISIBLE);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
+                intent.putExtra("Registration", "Logged out");
+                startActivity(intent);
             }
         });
         updateButton.setVisibility(View.VISIBLE);
@@ -215,6 +221,7 @@ public class Profile extends AppCompatActivity {
         profileText.setVisibility(View.GONE);
         confirm.setVisibility(View.GONE);
         changePasswordButton.setVisibility(View.GONE);
+        logout.setVisibility(View.GONE);
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
         citationLot.setX(200);
@@ -268,6 +275,17 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 changePassword();
+            }
+        });
+
+        logout = findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
+                intent.putExtra("Registration", "Logged out");
+                startActivity(intent);
             }
         });
         updateButton = findViewById(R.id.updateButton);

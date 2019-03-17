@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.Network.Request;
 import com.example.juanc.parkinglotdemo4.R;
+import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
 import com.example.juanc.parkinglotdemo4.Sockets;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
@@ -44,6 +45,7 @@ public class WaitingToMatch extends AppCompatActivity {
     private String matchCarColor = null;
     private String matchPickupLot = "";
     private String matchDropOff = "";
+    private Button logout;
 
     //TODO ask sigrid about time out?
 
@@ -70,6 +72,22 @@ public class WaitingToMatch extends AppCompatActivity {
         time2.setVisibility(View.VISIBLE);
         pickupLot.setVisibility(View.VISIBLE);
         dropoffLot.setVisibility(View.VISIBLE);
+        logout.setVisibility(View.VISIBLE);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final JSONObject body = new JSONObject();
+                try {
+                    body.put("email", email);
+                    realSocket.emit("send_cancelled_request", body);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
+                intent.putExtra("Registration", "Logged out");
+                startActivity(intent);
+            }
+        });
         cancel.setVisibility(View.VISIBLE);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,13 +95,7 @@ public class WaitingToMatch extends AppCompatActivity {
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("email", email);
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            realSocket.emit("send_cancelled_request", body);
-                        }
-                    });
-                    thread.start();
+                    realSocket.emit("send_cancelled_request", body);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -101,6 +113,7 @@ public class WaitingToMatch extends AppCompatActivity {
         pickupLot.setVisibility(View.GONE);
         dropoffLot.setVisibility(View.GONE);
         cancel.setVisibility(View.GONE);
+        logout.setVisibility(View.GONE);
         return true;
     }
 
@@ -123,6 +136,22 @@ public class WaitingToMatch extends AppCompatActivity {
         time2 = findViewById(R.id.time2);
         pickupLot = findViewById(R.id.pickup);
         dropoffLot = findViewById(R.id.dropoff);
+        logout = findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final JSONObject body = new JSONObject();
+                try {
+                    body.put("email", email);
+                    realSocket.emit("send_cancelled_request", body);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
+                intent.putExtra("Registration", "Logged out");
+                startActivity(intent);
+            }
+        });
         cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,13 +160,7 @@ public class WaitingToMatch extends AppCompatActivity {
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("email", email);
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            realSocket.emit("send_cancelled_request", body);
-                        }
-                    });
-                    thread.start();
+                    realSocket.emit("send_cancelled_request", body);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

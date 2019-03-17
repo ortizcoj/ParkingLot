@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.juanc.parkinglotdemo4.R;
+import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
 import com.example.juanc.parkinglotdemo4.Sockets;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
@@ -43,9 +44,7 @@ public class Match extends AppCompatActivity {
     private String carModel = "";
     private String carColor = null;
     private String matchName = "";
-
-
-    //TODO fix time
+    private Button logout;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -72,6 +71,16 @@ public class Match extends AppCompatActivity {
         color.setVisibility(View.VISIBLE);
         brand.setVisibility(View.VISIBLE);
         model.setVisibility(View.VISIBLE);
+        logout.setVisibility(View.VISIBLE);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
+                intent.putExtra("Registration", "Logged out");
+                startActivity(intent);
+            }
+        });
         complete.setVisibility(View.VISIBLE);
         complete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +134,7 @@ public class Match extends AppCompatActivity {
         model.setVisibility(View.GONE);
         complete.setVisibility(View.GONE);
         cancel.setVisibility(View.GONE);
+        logout.setVisibility(View.GONE);
         return true;
     }
 
@@ -168,6 +178,17 @@ public class Match extends AppCompatActivity {
                 }
             }
         });
+        logout = findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
+                intent.putExtra("Registration", "Logged out");
+                startActivity(intent);
+            }
+        });
+
         cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,7 +255,7 @@ public class Match extends AppCompatActivity {
         pickupLot.setText("Pick up lot: " + sPickup);
         dropoffLot.setText("Drop off lot: " + sDropoff);
         if (carColor!=null){
-            color.setText("Car color: "  + carColor);
+            color.setText("Car color: " + carColor);
             brand.setText("Car make: " + carMake);
             model.setText("Car model : " + carModel);
         }

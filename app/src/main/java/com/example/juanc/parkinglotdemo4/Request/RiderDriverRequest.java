@@ -26,6 +26,7 @@ import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Network.Request;
 import com.example.juanc.parkinglotdemo4.Profile;
 import com.example.juanc.parkinglotdemo4.R;
+import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +51,7 @@ public class RiderDriverRequest extends AppCompatActivity {
     private String pickupMinEarly;
     private String pickupHourLate;
     private String pickupMinLate;
+    private Button logout;
     private TextView and;
     String email;
     String startTime = "";
@@ -92,6 +94,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         firstTimeButton.setVisibility(View.GONE);
         secondTimeButton.setVisibility(View.GONE);
         profile.setVisibility(View.GONE);
+        logout.setVisibility(View.GONE);
         citationLot.setX(200);
         citationLot.setY(850);
         citationLot.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +130,18 @@ public class RiderDriverRequest extends AppCompatActivity {
             pickup.setVisibility(View.INVISIBLE);
             pickupDropDown.setVisibility(View.INVISIBLE);
         }
+
+        logout.setVisibility(View.VISIBLE);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
+                intent.putExtra("Registration", "Logged out");
+                startActivity(intent);
+            }
+        });
+
         profile.setVisibility(View.VISIBLE);
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,6 +225,17 @@ public class RiderDriverRequest extends AppCompatActivity {
         carMake = extras.getString("carMake");
         carModel = extras.getString("carModel");
         password = extras.getString("Password");
+
+        logout = findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
+                intent.putExtra("Registration", "Logged out");
+                startActivity(intent);
+            }
+        });
 
         profile = findViewById(R.id.profile);
         profile.setOnClickListener(new View.OnClickListener() {

@@ -29,4 +29,5 @@
     <string name="complete_ride">Complete</string>
     <string name="cancel">Cancel</string>
     <string name="request_info">Request Info</string>
+    <string name="logout">Logout</string>
 </resources>

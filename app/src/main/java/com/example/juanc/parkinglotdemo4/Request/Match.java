@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
@@ -88,13 +89,15 @@ public class Match extends AppCompatActivity {
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("email", email);
-                    Thread thread = new Thread(new Runnable() {
+//                    Thread thread = new Thread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             realSocket.emit("send_completed_match", body);
+                            rideCompleted("Ride completed! Hope you enjoyed our service");
                         }
                     });
-                    thread.start();
+//                    thread.start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -107,13 +110,16 @@ public class Match extends AppCompatActivity {
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("email", email);
-                    Thread thread = new Thread(new Runnable() {
+//                    Thread thread = new Thread(new Runnable() {
+
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             realSocket.emit("send_cancelled_match", body);
+                            rideCompleted("You cancelled the ride");
                         }
                     });
-                    thread.start();
+//                    thread.start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -166,13 +172,15 @@ public class Match extends AppCompatActivity {
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("email", email);
-                    Thread thread = new Thread(new Runnable() {
+//                    Thread thread = new Thread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             realSocket.emit("send_completed_match", body);
+                            rideCompleted("Ride completed! Hope you enjoyed our service");
                         }
                     });
-                    thread.start();
+//                    thread.start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -197,13 +205,16 @@ public class Match extends AppCompatActivity {
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("email", email);
-                    Thread thread = new Thread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+//                    Thread thread = new Thread(new Runnable() {
                             realSocket.emit("get_cancelled_match", body);
+                            rideCompleted("You cancelled the ride");
+
                         }
                     });
-                    thread.start();
+//                    thread.start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -235,18 +246,25 @@ public class Match extends AppCompatActivity {
 
 //        while(!rideComplete || !rideCancel){
 //            if (rideCancel){
-//                Toast.makeText(getApplicationContext(), "Your ride was cancelled, looking for a " +
-//                        "new match", Toast.LENGTH_LONG).show();
+//                  rideCancelled();
 //            }
 //            if (rideComplete){
-//                Toast.makeText(getApplicationContext(), "Ride completed! Hope you enjoyed our service"
-//                        , Toast.LENGTH_LONG).show();
-//
-//                Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
-//                startActivity(intent);
+//                rideCompleted();
 //            }
 //
 //        }
+    }
+
+    private void rideCancelled() {
+        Toast.makeText(getApplicationContext(), "Your ride was cancelled, looking for a " +
+                "new match", Toast.LENGTH_LONG).show();
+    }
+
+    private void rideCompleted(String s) {
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
+        startActivity(intent);
     }
 
     private void updateFields() {
@@ -304,21 +322,21 @@ public class Match extends AppCompatActivity {
     private Emitter.Listener onMatchCancelled = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Thread thread = new Thread(new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    rideCancel = true;
+                    rideCancelled();
                 }
             });
-            thread.start();
         }
     };
 
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Thread thread = new Thread(new Runnable() {
-                //TODO set new text
+            runOnUiThread(new Runnable() {
+//            Thread thread = new Thread(new Runnable() {
+//                //TODO set new text
                 @Override
                 public void run() {
                     JSONObject json = new JSONObject();
@@ -334,12 +352,14 @@ public class Match extends AppCompatActivity {
                             carColor = ((String) args[0]).split("\"")[27];
                         }
                         matchName = ((String) args[0]).split("\"")[3];
+
+                        updateFields();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             });
-            thread.start();
+//            thread.start();
         }
     };
 }

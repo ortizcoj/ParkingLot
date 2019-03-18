@@ -18,9 +18,6 @@ import com.example.juanc.parkinglotdemo4.Network.LoginInfo;
 import com.example.juanc.parkinglotdemo4.Network.Networking;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.Security.Hashing;
-import com.example.juanc.parkinglotdemo4.Sockets;
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.Socket;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -35,9 +32,6 @@ public class Menu extends AppCompatActivity {
     private Button register;
     private Button login;
     private String regUser;
-    private Socket realSocket;
-
-    //TODO get sockets to update map
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -136,8 +130,6 @@ public class Menu extends AppCompatActivity {
         });
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        createSocket();
     }
 
     private void registration() {
@@ -152,19 +144,4 @@ public class Menu extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-    private void createSocket(){
-        Sockets socket = new Sockets();
-        realSocket = socket.getSocket();
-        realSocket.on("spot1_status", onNewMessage1);
-        realSocket.on("spot2_status", onNewMessage1);
-        realSocket.on("spot3_status", onNewMessage1);
-        realSocket.connect();
-    }
-
-    private Emitter.Listener onNewMessage1 = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-        }
-    };
 }

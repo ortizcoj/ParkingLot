@@ -7,13 +7,19 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.juanc.parkinglotdemo4.MapSocket;
 import com.example.juanc.parkinglotdemo4.R;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Socket;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LotDisplay extends AppCompatActivity {
 
     private int numberOfSpots = 10;
     private Spot[] spots = new Spot[numberOfSpots];
-
+    private Socket realSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +27,11 @@ public class LotDisplay extends AppCompatActivity {
         setContentView(R.layout.content_main);
         populateSpotsArray();
         setAllSpotsAvailable();
+
+        createSocket();
 //        spots[5].setVisibility(View.VISIBLE);
 //        spots[2].setVisibility(View.VISIBLE);
-        spots[0].setVisibility(View.VISIBLE);
+//        spots[0].setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -63,4 +71,37 @@ public class LotDisplay extends AppCompatActivity {
             spot.setVisibility(View.INVISIBLE);
         }
     }
+
+    private void createSocket(){
+        MapSocket socket = new MapSocket();
+        realSocket = socket.getSocket();
+        realSocket.on("spot_status", onNewMessage1);
+        realSocket.connect();
+    }
+
+    private Emitter.Listener onNewMessage1 = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("Stuff", args[0]);
+
+                        String spot = ((String) args[0]).split("\"")[2].toString().substring(2).split(",")[0];
+                        String occupied = ((String) args[0]).split("\"")[5];
+
+                        if (occupied.toLowerCase().equals("true")){
+                            spots[Integer.valueOf(spot)].setVisibility(View.VISIBLE);
+                        } else if (occupied.toLowerCase().equals("false")){
+                            spots[Integer.valueOf(spot)].setVisibility(View.INVISIBLE);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    };
 }

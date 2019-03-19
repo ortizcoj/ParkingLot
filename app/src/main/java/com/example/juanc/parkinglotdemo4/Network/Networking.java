@@ -45,10 +45,12 @@ public class Networking {
                     if (jsonData.equals("false\n")){
                         Intent intent = new Intent(context, Menu.class);
                         intent.putExtra("Registration", "There is an existing user with that email address");
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     } else {
                         Intent intent = new Intent(context, Menu.class);
                         intent.putExtra("Registration", "New user created");
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
 
@@ -85,6 +87,7 @@ public class Networking {
                     if (jsonData.equals("false\n")){
                         Intent intent = new Intent(context, Menu.class);
                         intent.putExtra("Registration", "Invalid password or email");
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     } else {
                         Intent intent = new Intent(context, RiderDriverRequest.class);

@@ -36,8 +36,6 @@ public class WaitingToMatch extends AppCompatActivity {
     private ImageView citationLot;
     private Button cancel;
     private Socket realSocket;
-    private boolean rideCancel = false;
-    private boolean matchMade = false;
     private volatile String matchName = null;
     private String matchTime;
     private String matchCarMake = null;
@@ -51,17 +49,8 @@ public class WaitingToMatch extends AppCompatActivity {
     private String userCarColor;
     private String userName;
     private String userPassword;
-
-    //TODO ask sigrid about time out?
-    /*
-        intent.putExtra("Email", email);
-                intent.putExtra("carColor", carColor);
-                intent.putExtra("carMake", carMake);
-                intent.putExtra("carModel", carModel);
-                intent.putExtra("Name", name);
-                intent.putExtra("Password", password);
-
-     */
+    private String time1;
+    private String time_2;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -198,11 +187,14 @@ public class WaitingToMatch extends AppCompatActivity {
         userPassword = extras.getString("Password");
         userName = extras.getString("Name");
         email = extras.getString("Email");
-        String time1 = extras.getString("Time1");
-        time1 = time1.substring(0,2) + ":" + time1.substring(2);
+        time1 = extras.getString("Time1");
+        time_2 = extras.getString("Time2");
+        if (!time1.contains(":")){
+            time1 = time1.substring(0,2) + ":" + time1.substring(2);
+            time_2 = time_2.substring(0,2) + ":" + time_2.substring(2);
+
+        }
         time.setText("Between : " + time1);
-        String time_2 = extras.getString("Time2");
-        time_2 = time_2.substring(0,2) + ":" + time_2.substring(2);
         time2.setText("" + time_2);
         String pick_up = extras.getString("Pickup");
         String drop_off = extras.getString("Dropoff");
@@ -312,6 +304,8 @@ public class WaitingToMatch extends AppCompatActivity {
                 intent.putExtra("userCarColor", userCarColor);
                 intent.putExtra("Password", userPassword);
                 intent.putExtra("name", userName);
+                intent.putExtra("Time1", time1);
+                intent.putExtra("Time2", time_2);
                 startActivity(intent);
             }
         });

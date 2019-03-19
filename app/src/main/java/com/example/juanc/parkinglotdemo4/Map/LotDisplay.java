@@ -86,8 +86,8 @@ public class LotDisplay extends AppCompatActivity {
                     try {
                         json.put("Stuff", args[0]);
 
-                        String spot = ((String) args[0]).split("\"")[2].toString().substring(2).split(",")[0];
-                        String occupied = ((String) args[0]).split("\"")[5];
+                        String spot = ((String) args[0]).split(":")[0];
+                        String occupied = ((String) args[0]).split(":")[1];
 
                         if (occupied.toLowerCase().equals("true")){
                             spots[Integer.valueOf(spot)].setVisibility(View.VISIBLE);

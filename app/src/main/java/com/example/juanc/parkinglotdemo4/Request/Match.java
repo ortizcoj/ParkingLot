@@ -48,6 +48,8 @@ public class Match extends AppCompatActivity {
     private String userCarColor;
     private String userName;
     private String userPassword;
+    private String time_1 = "";
+    private String time2;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -202,34 +204,13 @@ public class Match extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            realSocket.emit("send_completed_match", body);
+                            realSocket.emit("send_cancelled_match", body);
                             rideCompleted("You cancelled the ride");
                         }
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }
-        });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                final JSONObject body = new JSONObject();
-                try {
-                    body.put("email", email);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            realSocket.emit("get_cancelled_match", body);
-                            rideCompleted("You cancelled the ride");
-
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
             }
         });
 
@@ -250,6 +231,8 @@ public class Match extends AppCompatActivity {
         userCarModel = extras.getString("userCarModel");
         userPassword = extras.getString("Password");
         userName = extras.getString("name");
+        time_1 = extras.getString("Time1");
+        time2 = extras.getString("Time2");
 
         updateFields();
 
@@ -260,6 +243,19 @@ public class Match extends AppCompatActivity {
     private void rideCancelled() {
         Toast.makeText(getApplicationContext(), "Your ride was cancelled, looking for a " +
                 "new match", Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(getApplicationContext(), WaitingToMatch.class);
+        intent.putExtra("carColor", userCarColor);
+        intent.putExtra("carMake", userCarMake);
+        intent.putExtra("carModel", userCarModel);
+        intent.putExtra("Name", userName);
+        intent.putExtra("Password", userPassword);
+        intent.putExtra("Email", email);
+        intent.putExtra("Pickup", sPickup);
+        intent.putExtra("Dropoff", sDropoff);
+        intent.putExtra("Time1", time_1);
+        intent.putExtra("Time2", time2);
+        startActivity(intent);
     }
 
     private void rideCompleted(String s) {

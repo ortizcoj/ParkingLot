@@ -57,7 +57,6 @@ public class RiderDriverRequest extends AppCompatActivity {
     private String carMake = "";
     private String carModel = "";
     private String password = "";
-    private boolean sent = false;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -220,7 +219,6 @@ public class RiderDriverRequest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.request);
         Bundle extras = getIntent().getExtras();
-        Intent intent = getIntent();
         email = extras.getString("Email");
         name = extras.getString("Name");
         carColor = extras.getString("carColor");

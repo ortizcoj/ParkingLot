@@ -23,13 +23,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
-import com.example.juanc.parkinglotdemo4.Network.Request;
 import com.example.juanc.parkinglotdemo4.Profile;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class RiderDriverRequest extends AppCompatActivity {
 
@@ -189,6 +185,11 @@ public class RiderDriverRequest extends AppCompatActivity {
         intent.putExtra("Time1", startTime);
         intent.putExtra("Time2", endTime);
         intent.putExtra("Dropoff", dropoffDropDown.getSelectedItem().toString());
+        intent.putExtra("carColor", carColor);
+        intent.putExtra("carMake", carMake);
+        intent.putExtra("carModel", carModel);
+        intent.putExtra("Name", name);
+        intent.putExtra("Password", password);
         if (!requestSwitch.isChecked()){
             intent.putExtra("Pickup", pickupDropDown.getSelectedItem().toString());
         } else {
@@ -219,6 +220,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.request);
         Bundle extras = getIntent().getExtras();
+        Intent intent = getIntent();
         email = extras.getString("Email");
         name = extras.getString("Name");
         carColor = extras.getString("carColor");

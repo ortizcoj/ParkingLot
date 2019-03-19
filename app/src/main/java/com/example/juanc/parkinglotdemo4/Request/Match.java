@@ -35,9 +35,6 @@ public class Match extends AppCompatActivity {
     private Button complete;
     private Button cancel;
     private Socket realSocket;
-    private boolean rideComplete = false;
-    private boolean rideCancel = false;
-    private boolean newMatch = false;
     private String matchTime = null;
     private String sPickup = "";
     private String sDropoff = "";
@@ -46,6 +43,11 @@ public class Match extends AppCompatActivity {
     private String carColor = null;
     private String matchName = "";
     private Button logout;
+    private String userCarMake;
+    private String userCarModel;
+    private String userCarColor;
+    private String userName;
+    private String userPassword;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -89,7 +91,6 @@ public class Match extends AppCompatActivity {
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("email", email);
-//                    Thread thread = new Thread(new Runnable() {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -97,7 +98,6 @@ public class Match extends AppCompatActivity {
                             rideCompleted("Ride completed! Hope you enjoyed our service");
                         }
                     });
-//                    thread.start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -110,8 +110,6 @@ public class Match extends AppCompatActivity {
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("email", email);
-//                    Thread thread = new Thread(new Runnable() {
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -119,7 +117,6 @@ public class Match extends AppCompatActivity {
                             rideCompleted("You cancelled the ride");
                         }
                     });
-//                    thread.start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -172,7 +169,6 @@ public class Match extends AppCompatActivity {
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("email", email);
-//                    Thread thread = new Thread(new Runnable() {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -180,7 +176,6 @@ public class Match extends AppCompatActivity {
                             rideCompleted("Ride completed! Hope you enjoyed our service");
                         }
                     });
-//                    thread.start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -201,6 +196,24 @@ public class Match extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final JSONObject body = new JSONObject();
+                try {
+                    body.put("email", email);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            realSocket.emit("send_completed_match", body);
+                            rideCompleted("You cancelled the ride");
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
                 final JSONObject body = new JSONObject();
                 try {
@@ -208,19 +221,14 @@ public class Match extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                    Thread thread = new Thread(new Runnable() {
                             realSocket.emit("get_cancelled_match", body);
                             rideCompleted("You cancelled the ride");
 
                         }
                     });
-//                    thread.start();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
-                startActivity(intent);
 
             }
         });
@@ -237,22 +245,16 @@ public class Match extends AppCompatActivity {
             carModel = extras.getString("carModel");
         }
 
+        userCarColor = extras.getString("userCarColor");
+        userCarMake = extras.getString("userCarMake");
+        userCarModel = extras.getString("userCarModel");
+        userPassword = extras.getString("Password");
+        userName = extras.getString("name");
+
         updateFields();
 
         createSocket();
         sendNewID();
-
-//        waitForAction();
-
-//        while(!rideComplete || !rideCancel){
-//            if (rideCancel){
-//                  rideCancelled();
-//            }
-//            if (rideComplete){
-//                rideCompleted();
-//            }
-//
-//        }
     }
 
     private void rideCancelled() {
@@ -264,6 +266,12 @@ public class Match extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
         Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
+        intent.putExtra("carColor", userCarColor);
+        intent.putExtra("carMake", userCarMake);
+        intent.putExtra("carModel", userCarModel);
+        intent.putExtra("Name", userName);
+        intent.putExtra("Password", userPassword);
+        intent.putExtra("Email", email);
         startActivity(intent);
     }
 
@@ -276,15 +284,6 @@ public class Match extends AppCompatActivity {
             color.setText("Car color: " + carColor);
             brand.setText("Car make: " + carMake);
             model.setText("Car model : " + carModel);
-        }
-    }
-
-    private void waitForAction() {
-        while (true){
-            if (newMatch){
-                updateFields();
-                newMatch=false;
-            }
         }
     }
 
@@ -335,8 +334,6 @@ public class Match extends AppCompatActivity {
         @Override
         public void call(final Object... args) {
             runOnUiThread(new Runnable() {
-//            Thread thread = new Thread(new Runnable() {
-//                //TODO set new text
                 @Override
                 public void run() {
                     JSONObject json = new JSONObject();
@@ -359,7 +356,6 @@ public class Match extends AppCompatActivity {
                     }
                 }
             });
-//            thread.start();
         }
     };
 }

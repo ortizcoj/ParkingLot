@@ -29,9 +29,6 @@ public class LotDisplay extends AppCompatActivity {
         setAllSpotsAvailable();
 
         createSocket();
-//        spots[5].setVisibility(View.VISIBLE);
-//        spots[2].setVisibility(View.VISIBLE);
-//        spots[0].setVisibility(View.VISIBLE);
     }
 
     @Override

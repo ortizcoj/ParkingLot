@@ -46,8 +46,22 @@ public class WaitingToMatch extends AppCompatActivity {
     private String matchPickupLot = "";
     private String matchDropOff = "";
     private Button logout;
+    private String userCarMake;
+    private String userCarModel;
+    private String userCarColor;
+    private String userName;
+    private String userPassword;
 
     //TODO ask sigrid about time out?
+    /*
+        intent.putExtra("Email", email);
+                intent.putExtra("carColor", carColor);
+                intent.putExtra("carMake", carMake);
+                intent.putExtra("carModel", carModel);
+                intent.putExtra("Name", name);
+                intent.putExtra("Password", password);
+
+     */
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -166,18 +180,23 @@ public class WaitingToMatch extends AppCompatActivity {
                 }
 
                 Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
-                //TODO pass all info to RiderDriver
-//                intent.putExtra("carColor", );
-//                intent.putExtra("carMake", jsonData.split("\"")[7]);
-//                intent.putExtra("carModel", jsonData.split("\"")[11]);
-//                intent.putExtra("Name", );
-//                intent.putExtra("Email", email);
+                intent.putExtra("carColor", userCarColor);
+                intent.putExtra("carMake", userCarMake);
+                intent.putExtra("carModel", userCarModel);
+                intent.putExtra("Name", userName);
+                intent.putExtra("Password", userPassword);
+                intent.putExtra("Email", email);
 
                 startActivity(intent);
 
             }
         });
 
+        userCarColor = extras.getString("carColor");
+        userCarMake = extras.getString("carMake");
+        userCarModel = extras.getString("carModel");
+        userPassword = extras.getString("Password");
+        userName = extras.getString("Name");
         email = extras.getString("Email");
         String time1 = extras.getString("Time1");
         time1 = time1.substring(0,2) + ":" + time1.substring(2);
@@ -288,6 +307,11 @@ public class WaitingToMatch extends AppCompatActivity {
                 intent.putExtra("Time", matchTime);
                 intent.putExtra("Pickup", matchPickupLot);
                 intent.putExtra("Dropoff", matchDropoffLot);
+                intent.putExtra("userCarModel", userCarModel);
+                intent.putExtra("userCarMake", userCarMake);
+                intent.putExtra("userCarColor", userCarColor);
+                intent.putExtra("Password", userPassword);
+                intent.putExtra("name", userName);
                 startActivity(intent);
             }
         });

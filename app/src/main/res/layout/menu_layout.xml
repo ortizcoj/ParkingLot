@@ -21,12 +21,23 @@
         app:menu="@menu/navigation" />
 
     <TextView
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:textSize="16pt"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="20dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"/>
+
+    <TextView
         android:id="@+id/emailTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/email"
         android:textSize="12pt"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login"
         android:layout_margin="20dp"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"/>

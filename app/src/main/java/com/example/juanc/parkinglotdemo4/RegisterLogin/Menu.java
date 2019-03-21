@@ -23,7 +23,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class Menu extends AppCompatActivity {
 
-    //TODO add login text view to this screen
 
     private ImageView mImageView;
     private ImageView citationLot;
@@ -34,6 +33,7 @@ public class Menu extends AppCompatActivity {
     private Button register;
     private Button login;
     private String regUser;
+    private TextView loginTV;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -57,6 +57,7 @@ public class Menu extends AppCompatActivity {
         passwordTV.setVisibility(View.GONE);
         login.setVisibility(View.GONE);
         register.setVisibility(View.GONE);
+        loginTV.setVisibility(View.GONE);
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
         citationLot.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +75,7 @@ public class Menu extends AppCompatActivity {
         emailTV.setVisibility(View.VISIBLE);
         passwordED.setVisibility(View.VISIBLE);
         passwordTV.setVisibility(View.VISIBLE);
+        loginTV.setVisibility(View.VISIBLE);
         login.setVisibility(View.VISIBLE);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +116,7 @@ public class Menu extends AppCompatActivity {
         emailTV = findViewById(R.id.emailTV);
         passwordED = findViewById(R.id.passwordET);
         passwordTV = findViewById(R.id.passwordTV);
+        loginTV = findViewById(R.id.login);
         login = findViewById(R.id.loginButton);
         login.setOnClickListener(new View.OnClickListener() {
             @Override

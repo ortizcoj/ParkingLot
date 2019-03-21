@@ -19,13 +19,13 @@
     </LinearLayout>
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
+        android:id="@+id/spot0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/spot0"
-        app:height="14dp"
-        app:width="33dp"
+        android:layout_marginLeft="344dp"
         android:layout_marginTop="250dp"
-        android:layout_marginLeft="344dp"/>
+        app:height="14dp"
+        app:width="33dp" />
 
     <com.example.juanc.parkinglotdemo4.Map.Spot
         android:layout_width="wrap_content"

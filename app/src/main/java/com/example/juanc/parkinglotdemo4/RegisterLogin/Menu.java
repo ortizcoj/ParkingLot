@@ -23,6 +23,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class Menu extends AppCompatActivity {
 
+    //TODO add login text view to this screen
+
     private ImageView mImageView;
     private ImageView citationLot;
     private TextView emailTV;

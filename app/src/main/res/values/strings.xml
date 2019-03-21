@@ -14,7 +14,7 @@
     <string name="dropoff_location">Drop off Location</string>
     <string name="pick_up">Pick up</string>
     <string name="name">Name</string>
-    <string name="brand">Brand</string>
+    <string name="brand">Make</string>
     <string name="color">Color</string>
     <string name="model">Model</string>
     <string name="next">Next</string>

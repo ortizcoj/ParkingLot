@@ -29,6 +29,8 @@ public class LotDisplay extends AppCompatActivity {
         setAllSpotsAvailable();
 
         createSocket();
+
+        realSocket.emit("get_map_state");
     }
 
     @Override
@@ -73,6 +75,7 @@ public class LotDisplay extends AppCompatActivity {
         MapSocket socket = new MapSocket();
         realSocket = socket.getSocket();
         realSocket.on("spot_status", onNewMessage1);
+        realSocket.on("map_state", onNewMessage);
         realSocket.connect();
     }
 
@@ -93,6 +96,37 @@ public class LotDisplay extends AppCompatActivity {
                             spots[Integer.valueOf(spot)].setVisibility(View.VISIBLE);
                         } else if (occupied.toLowerCase().equals("false")){
                             spots[Integer.valueOf(spot)].setVisibility(View.INVISIBLE);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("Stuff", args[0]);
+
+                        String[] spot = ((String) args[0]).split(",");
+
+                        for (String aSpot : spot) {
+                            int num = Integer.valueOf(aSpot.split(":")[0]);
+                            String occupied = aSpot.split(":")[1];
+
+                            if (occupied.toLowerCase().equals("true")) {
+                                spots[num].setVisibility(View.VISIBLE);
+                            } else if (occupied.toLowerCase().equals("false")) {
+                                spots[num].setVisibility(View.INVISIBLE);
+                            }
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

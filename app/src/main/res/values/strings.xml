@@ -14,9 +14,9 @@
     <string name="dropoff_location">Drop off Location</string>
     <string name="pick_up">Pick up</string>
     <string name="name">Name</string>
-    <string name="brand">Make</string>
-    <string name="color">Color</string>
-    <string name="model">Model</string>
+    <string name="brand">Car Make</string>
+    <string name="color">Car Color</string>
+    <string name="model">Car Model</string>
     <string name="next">Next</string>
     <string name="profile">Profile</string>
     <string name="update">Update</string>

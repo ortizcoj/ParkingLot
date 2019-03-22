@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Profile;
@@ -170,7 +171,11 @@ public class RiderDriverRequest extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 convertToTimes();
-                openWaiting();
+                if (!startTime.equals("nullnull")){
+                    openWaiting();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Must select a time", Toast.LENGTH_LONG).show();
+                }
             }
         });
         mImageView.setVisibility(View.GONE);
@@ -362,7 +367,11 @@ public class RiderDriverRequest extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 convertToTimes();
-                openWaiting();
+                if (!startTime.equals("nullnull")){
+                    openWaiting();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Must select a time", Toast.LENGTH_LONG).show();
+                }
             }
         });
 

@@ -138,8 +138,4 @@ public class Register2 extends AppCompatActivity {
         Networking networking = new Networking();
         networking.registerUser(userInfo, getApplicationContext());
     }
-
-    @Override
-    public void onBackPressed() {
-    }
 }

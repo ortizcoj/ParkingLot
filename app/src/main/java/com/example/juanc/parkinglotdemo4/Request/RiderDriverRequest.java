@@ -202,6 +202,10 @@ public class RiderDriverRequest extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
     private void convertToTimes() {
         if (String.valueOf(pickupMinLate).length()==1){
             pickupMinLate = 0 + pickupMinLate;

@@ -135,4 +135,8 @@ public class LotDisplay extends AppCompatActivity {
             });
         }
     };
+
+    @Override
+    public void onBackPressed() {
+    }
 }

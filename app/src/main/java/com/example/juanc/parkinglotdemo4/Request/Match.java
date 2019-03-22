@@ -354,4 +354,8 @@ public class Match extends AppCompatActivity {
             });
         }
     };
+
+    @Override
+    public void onBackPressed() {
+    }
 }

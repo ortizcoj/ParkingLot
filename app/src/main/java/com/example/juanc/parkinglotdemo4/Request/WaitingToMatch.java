@@ -357,4 +357,8 @@ public class WaitingToMatch extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

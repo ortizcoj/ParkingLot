@@ -305,4 +305,7 @@ public class Profile extends AppCompatActivity {
         colorET.setEnabled(false);
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 }

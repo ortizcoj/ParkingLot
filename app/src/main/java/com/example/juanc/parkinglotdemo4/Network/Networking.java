@@ -73,7 +73,6 @@ public class Networking {
         String string = loginInfo.getEmail() + ":" + loginInfo.getPassword();
         final String basicAuth = "Basic " + Base64.encodeToString(string.getBytes(), Base64.NO_WRAP);
 
-        MediaType mediaType = MediaType.parse("application/json");
         final Request request = new Request.Builder()
                 .url("https://eagleride2019.herokuapp.com/loginUser")
                 .get()
@@ -121,15 +120,15 @@ public class Networking {
         final OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\n    \"name\": \"" + userInfo.getName() + "\",\n    " +
-                "\"email\": \"" + userInfo.getEmail() + "\",\n    \"carMake\": \"" + userInfo.getCarMake() + "\",\n    " +
-                "\"carModel\": \"" + userInfo.getCarModel() + "\",\n    \"carColor\": \"" + userInfo.getCarColor() + "\"\n}");
+        String data = "{\"name\":\"" + userInfo.getName() + "\", \"carModel\":\"" +
+                userInfo.getCarModel() + "\", \"carColor\":\"" + userInfo.getCarColor() + "\", \"carMake\":\"" + userInfo.getCarMake() + "\"}";
+        RequestBody body1 = RequestBody.create(mediaType, data);
 
         final Request request = new Request.Builder()
                 .url("https://eagleride2019.herokuapp.com/updateUser")
                 .addHeader("Content-Type", "application/json")
                 .addHeader("x-access-token", auth)
-                .post(body)
+                .post(body1)
                 .build();
 
         Thread thread = new Thread(new Runnable(){
@@ -155,13 +154,13 @@ public class Networking {
 
         MediaType mediaType = MediaType.parse("application/json");
 
-        RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + email + "\",\n  " +
-                "  \"password\": \"" + password+ "\"\n}");
+        RequestBody body = RequestBody.create(mediaType, "{\"password\": \"" + password+ "\"\n}");
 
         final Request request = new Request.Builder()
                 .url("https://eagleride2019.herokuapp.com/updatePassword")
                 .post(body)
                 .addHeader("Content-Type", "application/json")
+                .addHeader("x-access-token", auth)
                 .build();
 
         final Thread thread = new Thread(new Runnable(){

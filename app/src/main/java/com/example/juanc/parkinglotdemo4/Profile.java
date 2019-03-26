@@ -172,7 +172,12 @@ public class Profile extends AppCompatActivity {
 
     private void updatePassword() {
         Networking networking = new Networking();
-        networking.updatePassword(emailField.getText().toString(), password, tkn);
+        Hashing security = new Hashing();
+        try {
+            networking.updatePassword(emailField.getText().toString(), security.hash(password), tkn);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     private void confirmUpdateMethod() {

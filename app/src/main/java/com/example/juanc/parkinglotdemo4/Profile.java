@@ -46,6 +46,7 @@ public class Profile extends AppCompatActivity {
     private String password = "";
     private Button changePasswordButton;
     private Button logout;
+    private String tkn = "";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -171,7 +172,7 @@ public class Profile extends AppCompatActivity {
 
     private void updatePassword() {
         Networking networking = new Networking();
-        networking.updatePassword(emailField.getText().toString(), password, getApplicationContext());
+        networking.updatePassword(emailField.getText().toString(), password, tkn);
     }
 
     private void confirmUpdateMethod() {
@@ -192,7 +193,7 @@ public class Profile extends AppCompatActivity {
         User userInfo = new User(nameET.getText().toString(), emailField.getText().toString(), password, brandET.getText().toString(), modelET.getText().toString(), colorET.getText().toString());
 
         Networking networking = new Networking();
-        networking.updateUser(userInfo);
+        networking.updateUser(userInfo, tkn);
 
         emailField.setText(userInfo.getEmail());
         nameET.setText(userInfo.getName());
@@ -269,6 +270,7 @@ public class Profile extends AppCompatActivity {
         brandET.setText(extras.getString("carMake"));
         modelET.setText(extras.getString("carModel"));
         password = extras.getString("Password");
+        tkn = extras.getString("token");
         disableButtons();
         changePasswordButton = findViewById(R.id.changePasswordButton);
         changePasswordButton.setOnClickListener(new View.OnClickListener() {

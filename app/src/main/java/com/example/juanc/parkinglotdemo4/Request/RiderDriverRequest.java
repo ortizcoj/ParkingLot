@@ -58,6 +58,7 @@ public class RiderDriverRequest extends AppCompatActivity {
     private String carMake = "";
     private String carModel = "";
     private String password = "";
+    private String tkn = "";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -143,13 +144,7 @@ public class RiderDriverRequest extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), Profile.class);
-                intent.putExtra("carColor", carColor);
-                intent.putExtra("carMake", carMake);
-                intent.putExtra("carModel", carModel);
-                intent.putExtra("Name", name);
-                intent.putExtra("Email", email);
-                intent.putExtra("Password", password);
+                Intent intent = launchProfile();
                 startActivity(intent);
             }
         });
@@ -170,12 +165,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                convertToTimes();
-                if (!startTime.equals("nullnull")){
-                    openWaiting();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Must select a time", Toast.LENGTH_LONG).show();
-                }
+                makeRequest();
             }
         });
         mImageView.setVisibility(View.GONE);
@@ -234,6 +224,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         carMake = extras.getString("carMake");
         carModel = extras.getString("carModel");
         password = extras.getString("Password");
+        tkn = extras.getString("token");
 
         logout = findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -251,13 +242,7 @@ public class RiderDriverRequest extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), Profile.class);
-                intent.putExtra("carColor", carColor);
-                intent.putExtra("carMake", carMake);
-                intent.putExtra("carModel", carModel);
-                intent.putExtra("Name", name);
-                intent.putExtra("Email", email);
-                intent.putExtra("Password", password);
+                Intent intent = launchProfile();
                 startActivity(intent);
             }
         });
@@ -370,16 +355,33 @@ public class RiderDriverRequest extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                convertToTimes();
-                if (!startTime.equals("nullnull")){
-                    openWaiting();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Must select a time", Toast.LENGTH_LONG).show();
-                }
+                makeRequest();
             }
         });
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    private void makeRequest() {
+        convertToTimes();
+        if (!startTime.equals("nullnull")){
+            openWaiting();
+        } else {
+            Toast.makeText(getApplicationContext(), "Must select a time", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @NonNull
+    private Intent launchProfile() {
+        Intent intent = new Intent(getApplicationContext(), Profile.class);
+        intent.putExtra("carColor", carColor);
+        intent.putExtra("carMake", carMake);
+        intent.putExtra("carModel", carModel);
+        intent.putExtra("Name", name);
+        intent.putExtra("Email", email);
+        intent.putExtra("Password", password);
+        intent.putExtra("token", tkn);
+        return intent;
     }
 }

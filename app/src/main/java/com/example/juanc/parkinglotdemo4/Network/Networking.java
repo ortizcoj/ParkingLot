@@ -2,6 +2,7 @@ package com.example.juanc.parkinglotdemo4.Network;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -69,12 +70,14 @@ public class Networking {
 
         final OkHttpClient client = new OkHttpClient();
 
+        String string = loginInfo.getEmail() + ":" + loginInfo.getPassword();
+        final String basicAuth = "Basic " + Base64.encodeToString(string.getBytes(), Base64.NO_WRAP);
+
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\n    \"email\": \"" + loginInfo.getEmail() + "\",\n  " +
-                        "  \"password\": \"" + loginInfo.getPassword() + "\"\n}");
         final Request request = new Request.Builder()
                 .url("https://eagleride2019.herokuapp.com/loginUser")
-                .post(body)
+                .get()
+                .addHeader("Authorization", basicAuth)
                 .addHeader("Content-Type", "application/json")
                 .build();
 
@@ -91,13 +94,14 @@ public class Networking {
                         context.startActivity(intent);
                     } else {
                         Intent intent = new Intent(context, RiderDriverRequest.class);
-                        intent.putExtra("carColor", jsonData.split("\"")[3]);
-                        intent.putExtra("carMake", jsonData.split("\"")[7]);
-                        intent.putExtra("carModel", jsonData.split("\"")[11]);
-                        intent.putExtra("Name", jsonData.split("\"")[15]);
+                        intent.putExtra("carColor", jsonData.split(",")[0].split(":")[1].split("\"")[1]);
+                        intent.putExtra("carMake", jsonData.split(",")[1].split(":")[1].split("\"")[1]);
+                        intent.putExtra("carModel", jsonData.split(",")[2].split(":")[1].split("\"")[1]);
+                        intent.putExtra("Name", jsonData.split(",")[3].split(":")[1].split("\"")[1]);
                         intent.putExtra("Email", loginInfo.getEmail());
                         intent.putExtra("Password", loginInfo.getPassword());
                         intent.putExtra("Registration", "Welcome");
+                        intent.putExtra("token", jsonData.split(",")[4].split(":")[1].split("\"")[1]);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
@@ -113,7 +117,7 @@ public class Networking {
         thread.start();
     }
 
-    public void updateUser(User userInfo) {
+    public void updateUser(User userInfo, String auth) {
         final OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");
@@ -123,8 +127,9 @@ public class Networking {
 
         final Request request = new Request.Builder()
                 .url("https://eagleride2019.herokuapp.com/updateUser")
-                .post(body)
                 .addHeader("Content-Type", "application/json")
+                .addHeader("x-access-token", auth)
+                .post(body)
                 .build();
 
         Thread thread = new Thread(new Runnable(){
@@ -145,7 +150,7 @@ public class Networking {
         thread.start();
     }
 
-    public void updatePassword(String email, String password, final Context context) {
+    public void updatePassword(String email, String password, String auth) {
         final OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");

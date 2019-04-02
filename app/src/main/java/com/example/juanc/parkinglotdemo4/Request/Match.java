@@ -50,6 +50,8 @@ public class Match extends AppCompatActivity {
     private String userPassword;
     private String time_1 = "";
     private String time2;
+    private String dropoff1;
+    private String pick_up;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -218,6 +220,7 @@ public class Match extends AppCompatActivity {
         matchName = extras.getString("Name");
         String time1 = extras.getString("Time");
         matchTime = time1.substring(0,2) + ":" + time1.substring(2,4);
+        pick_up = extras.getString("pick_up");
         sPickup = extras.getString("Pickup");
         sDropoff = extras.getString("Dropoff");
         if (extras.getString("carColor")!=null) {
@@ -233,6 +236,7 @@ public class Match extends AppCompatActivity {
         userName = extras.getString("name");
         time_1 = extras.getString("Time1");
         time2 = extras.getString("Time2");
+        dropoff1 = extras.getString("Dropoff1");
 
         updateFields();
 
@@ -251,10 +255,11 @@ public class Match extends AppCompatActivity {
         intent.putExtra("Name", userName);
         intent.putExtra("Password", userPassword);
         intent.putExtra("Email", email);
-        intent.putExtra("Pickup", sPickup);
-        intent.putExtra("Dropoff", sDropoff);
+        intent.putExtra("Pickup", pick_up);
+        intent.putExtra("Dropoff", dropoff1);
         intent.putExtra("Time1", time_1);
         intent.putExtra("Time2", time2);
+        intent.putExtra("NewRide", "0");
         startActivity(intent);
     }
 

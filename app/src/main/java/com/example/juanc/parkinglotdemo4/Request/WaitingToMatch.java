@@ -51,6 +51,7 @@ public class WaitingToMatch extends AppCompatActivity {
     private String userPassword;
     private String time1;
     private String time_2;
+    private String pick_up;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -196,7 +197,7 @@ public class WaitingToMatch extends AppCompatActivity {
         }
         time.setText("Between : " + time1);
         time2.setText("" + time_2);
-        String pick_up = extras.getString("Pickup");
+        pick_up = extras.getString("Pickup");
         String drop_off = extras.getString("Dropoff");
         dropoffLot.setText("Drop off lot: " + drop_off);
         if (!pick_up.equals("0")){
@@ -206,7 +207,9 @@ public class WaitingToMatch extends AppCompatActivity {
         }
 
         createSocket();
-        sendRequest(time1, time_2, pick_up, drop_off);
+        if (extras.getString("NewRide").equals("1")){
+            sendRequest(time1, time_2, pick_up, drop_off);
+        }
     }
 
     private void sendRequest(String startTime, String endTime, String pick, String drop) {
@@ -299,6 +302,7 @@ public class WaitingToMatch extends AppCompatActivity {
                 intent.putExtra("Time", matchTime);
                 intent.putExtra("Pickup", matchPickupLot);
                 intent.putExtra("Dropoff", matchDropoffLot);
+                intent.putExtra("Dropoff1", dropoffLot.getText().toString());
                 intent.putExtra("userCarModel", userCarModel);
                 intent.putExtra("userCarMake", userCarMake);
                 intent.putExtra("userCarColor", userCarColor);
@@ -306,6 +310,7 @@ public class WaitingToMatch extends AppCompatActivity {
                 intent.putExtra("name", userName);
                 intent.putExtra("Time1", time1);
                 intent.putExtra("Time2", time_2);
+                intent.putExtra("pick_up", pick_up);
                 startActivity(intent);
             }
         });

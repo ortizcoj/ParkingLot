@@ -184,6 +184,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         intent.putExtra("carModel", carModel);
         intent.putExtra("Name", name);
         intent.putExtra("Password", password);
+        intent.putExtra("NewRide", "1");
         if (!requestSwitch.isChecked()){
             intent.putExtra("Pickup", pickupDropDown.getSelectedItem().toString());
         } else {

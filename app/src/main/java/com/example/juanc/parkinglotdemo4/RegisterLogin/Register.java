@@ -70,8 +70,7 @@ public class Register extends AppCompatActivity {
         nextButton.setVisibility(View.GONE);
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
-        citationLot.setX(200);
-        citationLot.setY(850);
+        citationLot.setAlpha((float) 0.0);
         citationLot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

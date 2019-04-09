@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
 import com.example.juanc.parkinglotdemo4.Sockets;
@@ -132,6 +133,14 @@ public class Match extends AppCompatActivity {
     private boolean setUpRideMainUI() {
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
+        citationLot.setAlpha((float) 0.0);
+        citationLot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LotDisplay.class);
+                startActivity(intent);
+            }
+        });
         name.setVisibility(View.GONE);
         time.setVisibility(View.GONE);
         pickupLot.setVisibility(View.GONE);

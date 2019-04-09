@@ -1,11 +1,10 @@
 package com.example.juanc.parkinglotdemo4.Map;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.example.juanc.parkinglotdemo4.MapSocket;
 import com.example.juanc.parkinglotdemo4.R;
@@ -15,18 +14,22 @@ import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LotDisplay extends AppCompatActivity {
+import java.util.Map;
 
-    private int numberOfSpots = 10;
-    private Spot[] spots = new Spot[numberOfSpots];
+public class LotDisplay extends AppCompatActivity {
     private Socket realSocket;
+    private LinearLayout layout;
+    private int imgNumber = 0;
+    private boolean spot1 = false;
+    private boolean spot2 = false;
+    private boolean spot3 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
-        populateSpotsArray();
-        setAllSpotsAvailable();
+        layout = findViewById(R.id.map);
+        layout.setBackgroundResource(R.drawable.parkingmap);
 
         createSocket();
 
@@ -55,22 +58,6 @@ public class LotDisplay extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void populateSpotsArray(){
-        Resources resources = getResources();
-        String packageName = getPackageName();
-        for(int i = 0; i < spots.length; i++){
-            int id = resources.getIdentifier("spot" + i, "id", packageName);
-            Spot spot = findViewById(id);
-            spots[i] = spot;
-        }
-    }
-
-    public void setAllSpotsAvailable(){
-        for(Spot spot: spots){
-            spot.setVisibility(View.INVISIBLE);
-        }
-    }
-
     private void createSocket(){
         MapSocket socket = new MapSocket();
         realSocket = socket.getSocket();
@@ -92,10 +79,58 @@ public class LotDisplay extends AppCompatActivity {
                         String spot = ((String) args[0]).split(":")[0];
                         String occupied = ((String) args[0]).split(":")[1];
 
-                        if (occupied.toLowerCase().equals("true")){
-                            spots[Integer.valueOf(spot)].setVisibility(View.VISIBLE);
-                        } else if (occupied.toLowerCase().equals("false")){
-                            spots[Integer.valueOf(spot)].setVisibility(View.INVISIBLE);
+                        if (occupied.toLowerCase().equals("true")) {
+                            if (Integer.valueOf(spot) == 2 && !spot3){
+                                imgNumber += 4;
+                                spot3 = true;
+                            }
+                            else if (Integer.valueOf(spot) == 1 && !spot2){
+                                imgNumber += 2;
+                                spot2 = true;
+                            } else if (Integer.valueOf(spot) == 0 && !spot1){
+                                imgNumber += 1;
+                                spot1 = true;
+                            }
+                        } else if (occupied.toLowerCase().equals("false")) {
+                            if (Integer.valueOf(spot) == 2 && spot3){
+                                imgNumber -= 4;
+                                spot3 = false;
+                            }
+                            else if (Integer.valueOf(spot) == 1 && spot2){
+                                imgNumber -= 2;
+                                spot2 = false;
+                            } else if (Integer.valueOf(spot) == 0 && spot1){
+                                imgNumber -= 1;
+                                spot1 = false;
+                            }
+                        }
+
+                        switch (imgNumber){
+                            case 0:{
+                                layout.setBackgroundResource(R.drawable.parkingmap);
+                                break;
+                            }case 1:{
+                                layout.setBackgroundResource(R.drawable.parkingmap1);
+                                break;
+                            } case 2:{
+                                layout.setBackgroundResource(R.drawable.parkingmap2);
+                                break;
+                            }case 3:{
+                                layout.setBackgroundResource(R.drawable.parkingmap3);
+                                break;
+                            } case 4:{
+                                layout.setBackgroundResource(R.drawable.parkingmap4);
+                                break;
+                            }case 5:{
+                                layout.setBackgroundResource(R.drawable.parkingmap5);
+                                break;
+                            } case 6:{
+                                layout.setBackgroundResource(R.drawable.parkingmap6);
+                                break;
+                            }case 7:{
+                                layout.setBackgroundResource(R.drawable.parkingmap7);
+                                break;
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -122,11 +157,49 @@ public class LotDisplay extends AppCompatActivity {
                             String occupied = aSpot.split(":")[1];
 
                             if (occupied.toLowerCase().equals("true")) {
-                                spots[num].setVisibility(View.VISIBLE);
+                                if (num == 2){
+                                    imgNumber += 4;
+                                    spot3 = true;
+                                }
+                                else if (num == 1){
+                                    imgNumber += 2;
+                                    spot2 = true;
+                                } else if (num == 0){
+                                    imgNumber += 1;
+                                    spot1 = true;
+
+                                }
                             } else if (occupied.toLowerCase().equals("false")) {
-                                spots[num].setVisibility(View.INVISIBLE);
                             }
 
+                        }
+
+                        switch (imgNumber){
+                            case 0:{
+                                layout.setBackgroundResource(R.drawable.parkingmap);
+                                break;
+                            }case 1:{
+                                layout.setBackgroundResource(R.drawable.parkingmap1);
+                                break;
+                            } case 2:{
+                                layout.setBackgroundResource(R.drawable.parkingmap2);
+                                break;
+                            }case 3:{
+                                layout.setBackgroundResource(R.drawable.parkingmap3);
+                                break;
+                            } case 4:{
+                                layout.setBackgroundResource(R.drawable.parkingmap4);
+                                break;
+                            }case 5:{
+                                layout.setBackgroundResource(R.drawable.parkingmap5);
+                                break;
+                            } case 6:{
+                                layout.setBackgroundResource(R.drawable.parkingmap6);
+                                break;
+                            }case 7:{
+                                layout.setBackgroundResource(R.drawable.parkingmap7);
+                                break;
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

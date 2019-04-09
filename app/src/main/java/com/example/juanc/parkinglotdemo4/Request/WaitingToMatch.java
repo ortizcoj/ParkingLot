@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Network.Request;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
@@ -111,6 +112,14 @@ public class WaitingToMatch extends AppCompatActivity {
     private boolean setUpRideMainUI() {
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
+        citationLot.setAlpha((float) 0.0);
+        citationLot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LotDisplay.class);
+                startActivity(intent);
+            }
+        });
         time.setVisibility(View.GONE);
         and.setVisibility(View.GONE);
         time2.setVisibility(View.GONE);

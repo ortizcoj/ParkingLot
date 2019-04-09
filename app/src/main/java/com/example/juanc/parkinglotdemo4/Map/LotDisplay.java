@@ -14,8 +14,6 @@ import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Map;
-
 public class LotDisplay extends AppCompatActivity {
     private Socket realSocket;
     private LinearLayout layout;

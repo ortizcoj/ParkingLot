@@ -1,6 +1,5 @@
 package com.example.juanc.parkinglotdemo4.RegisterLogin;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -19,18 +18,7 @@ import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.Security.Hashing;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.util.Base64;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 public class Register extends AppCompatActivity {
 

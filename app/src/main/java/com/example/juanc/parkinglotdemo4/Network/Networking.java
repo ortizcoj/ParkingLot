@@ -3,15 +3,9 @@ package com.example.juanc.parkinglotdemo4.Network;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Base64;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.example.juanc.parkinglotdemo4.Profile;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
 import com.example.juanc.parkinglotdemo4.Request.RiderDriverRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 

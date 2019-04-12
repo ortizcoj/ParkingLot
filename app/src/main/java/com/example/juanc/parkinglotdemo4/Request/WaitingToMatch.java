@@ -140,6 +140,7 @@ public class WaitingToMatch extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mImageView = findViewById(R.id.map);
+        mImageView.setImageResource(R.drawable.map);
         mImageView.setVisibility(View.INVISIBLE);
         citationLot = findViewById(R.id.citation);
         citationLot.setVisibility(View.INVISIBLE);
@@ -216,6 +217,9 @@ public class WaitingToMatch extends AppCompatActivity {
         }
 
         createSocket();
+
+
+        realSocket.emit("get_lot_count");
         if (extras.getString("NewRide").equals("1")){
             sendRequest(time1, time_2, pick_up, drop_off);
         }
@@ -239,8 +243,43 @@ public class WaitingToMatch extends AppCompatActivity {
         realSocket.on("get_rider_match", onNewMessage);
         realSocket.on("get_driver_match", onNewMessage);
         realSocket.on("send_cancelled_request", onCancelRequest);
+        realSocket.on("lot_count", onNewMessage1);
+        realSocket.on("first_state_count", onNewMessage1);
         realSocket.connect();
     }
+
+    @Override
+    protected void onResume() {
+        realSocket.connect();
+        super.onResume();
+    }
+
+    private Emitter.Listener onNewMessage1 = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("Stuff", args[0]);
+                        int spot = (int) args[0];
+
+                        if (spot==186){
+                            mImageView.setImageResource(R.drawable.map186);
+                        } else if (spot==185){
+                            mImageView.setImageResource(R.drawable.map185);
+                        } else if (spot==184){
+                            mImageView.setImageResource(R.drawable.map184);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    };
 
     @Override
     protected void onDestroy() {

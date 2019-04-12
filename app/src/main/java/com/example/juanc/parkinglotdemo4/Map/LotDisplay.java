@@ -206,4 +206,10 @@ public class LotDisplay extends AppCompatActivity {
             });
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        realSocket.disconnect();
+        super.onBackPressed();
+    }
 }

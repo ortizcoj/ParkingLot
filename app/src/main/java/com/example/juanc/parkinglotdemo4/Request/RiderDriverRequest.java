@@ -24,9 +24,15 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
+import com.example.juanc.parkinglotdemo4.MapSocket;
 import com.example.juanc.parkinglotdemo4.Profile;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Socket;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RiderDriverRequest extends AppCompatActivity {
 
@@ -59,6 +65,7 @@ public class RiderDriverRequest extends AppCompatActivity {
     private String carModel = "";
     private String password = "";
     private String tkn = "";
+    private Socket realSocket;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -247,6 +254,7 @@ public class RiderDriverRequest extends AppCompatActivity {
             }
         });
         mImageView = findViewById(R.id.map);
+        mImageView.setImageResource(R.drawable.map);
         mImageView.setVisibility(View.INVISIBLE);
         citationLot = findViewById(R.id.citation);
         citationLot.setVisibility(View.INVISIBLE);
@@ -361,7 +369,52 @@ public class RiderDriverRequest extends AppCompatActivity {
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        createSocket();
+
+        realSocket.emit("get_lot_count");
     }
+
+    private void createSocket(){
+        MapSocket socket = new MapSocket();
+        realSocket = socket.getSocket();
+        realSocket.on("lot_count", onNewMessage);
+        realSocket.on("first_state_count", onNewMessage);
+        realSocket.connect();
+    }
+
+    @Override
+    protected void onResume() {
+        realSocket.connect();
+        super.onResume();
+    }
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("Stuff", args[0]);
+                        int spot = (int) args[0];
+
+                        if (spot==186){
+                            mImageView.setImageResource(R.drawable.map186);
+                        } else if (spot==185){
+                            mImageView.setImageResource(R.drawable.map185);
+                        } else if (spot==184){
+                            mImageView.setImageResource(R.drawable.map184);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    };
 
     private void makeRequest() {
         convertToTimes();

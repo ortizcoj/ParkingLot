@@ -251,6 +251,8 @@ public class Match extends AppCompatActivity {
 
         createSocket();
         sendNewID();
+
+        realSocket.emit("get_lot_count");
     }
 
     private void rideCancelled() {
@@ -319,6 +321,8 @@ public class Match extends AppCompatActivity {
         realSocket.on("match_cancelled", onMatchCancelled);
         realSocket.on("get_rider_match", onNewMessage);
         realSocket.on("get_driver_match", onNewMessage);
+        realSocket.on("lot_count", onNewMessage1);
+        realSocket.on("first_state_count", onNewMessage1);
         realSocket.connect();
     }
 
@@ -361,6 +365,39 @@ public class Match extends AppCompatActivity {
                         matchName = ((String) args[0]).split("\"")[3];
 
                         updateFields();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        realSocket.connect();
+        super.onResume();
+    }
+
+    private Emitter.Listener onNewMessage1 = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("Stuff", args[0]);
+                        int spot = (int) args[0];
+
+                        if (spot==186){
+                            mImageView.setImageResource(R.drawable.map186);
+                        } else if (spot==185){
+                            mImageView.setImageResource(R.drawable.map185);
+                        } else if (spot==184){
+                            mImageView.setImageResource(R.drawable.map184);
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

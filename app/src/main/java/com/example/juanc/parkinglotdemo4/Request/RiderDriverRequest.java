@@ -191,6 +191,7 @@ public class RiderDriverRequest extends AppCompatActivity {
         intent.putExtra("Name", name);
         intent.putExtra("Password", password);
         intent.putExtra("NewRide", "1");
+        intent.putExtra("tkn", tkn);
         if (!requestSwitch.isChecked()){
             intent.putExtra("Pickup", pickupDropDown.getSelectedItem().toString());
         } else {
@@ -384,9 +385,9 @@ public class RiderDriverRequest extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onRestart() {
         realSocket.connect();
-        super.onResume();
+        super.onRestart();
     }
 
     private Emitter.Listener onNewMessage = new Emitter.Listener() {

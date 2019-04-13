@@ -158,9 +158,9 @@ public class Menu extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onRestart() {
         realSocket.connect();
-        super.onResume();
+        super.onRestart();
     }
 
     private void registration() {

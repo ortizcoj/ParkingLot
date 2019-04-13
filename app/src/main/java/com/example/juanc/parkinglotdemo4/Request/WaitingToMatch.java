@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
+import com.example.juanc.parkinglotdemo4.MapSocket;
 import com.example.juanc.parkinglotdemo4.Network.Request;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
@@ -27,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class WaitingToMatch extends AppCompatActivity {
+    private TextView requestText;
     private TextView time;
     private TextView pickupLot;
     private TextView dropoffLot;
@@ -53,6 +55,8 @@ public class WaitingToMatch extends AppCompatActivity {
     private String time1;
     private String time_2;
     private String pick_up;
+    private Socket mapSocket;
+    private String tkn;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -69,9 +73,10 @@ public class WaitingToMatch extends AppCompatActivity {
         }
     };
 
-    private boolean setUpMapMainUI() {
+    private boolean setUpRideMainUI() {
         mImageView.setVisibility(View.GONE);
         citationLot.setVisibility(View.GONE);
+        requestText.setVisibility(View.VISIBLE);
         time.setVisibility(View.VISIBLE);
         and.setVisibility(View.VISIBLE);
         time2.setVisibility(View.VISIBLE);
@@ -101,6 +106,7 @@ public class WaitingToMatch extends AppCompatActivity {
                 try {
                     body.put("email", email);
                     realSocket.emit("send_cancelled_request", body);
+                    rideCancel();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -109,7 +115,21 @@ public class WaitingToMatch extends AppCompatActivity {
         return true;
     }
 
-    private boolean setUpRideMainUI() {
+
+
+    private void rideCancel() {
+        Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
+        intent.putExtra("carColor", userCarColor);
+        intent.putExtra("carMake", userCarMake);
+        intent.putExtra("carModel", userCarModel);
+        intent.putExtra("Name", userName);
+        intent.putExtra("Password", userPassword);
+        intent.putExtra("Email", email);
+        intent.putExtra("token", tkn);
+        startActivity(intent);
+    }
+
+    private boolean setUpMapMainUI() {
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
         citationLot.setAlpha((float) 0.0);
@@ -120,6 +140,7 @@ public class WaitingToMatch extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        requestText.setVisibility(View.GONE);
         time.setVisibility(View.GONE);
         and.setVisibility(View.GONE);
         time2.setVisibility(View.GONE);
@@ -139,6 +160,7 @@ public class WaitingToMatch extends AppCompatActivity {
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        requestText = findViewById(R.id.request);
         mImageView = findViewById(R.id.map);
         mImageView.setImageResource(R.drawable.map);
         mImageView.setVisibility(View.INVISIBLE);
@@ -175,20 +197,10 @@ public class WaitingToMatch extends AppCompatActivity {
                 try {
                     body.put("email", email);
                     realSocket.emit("send_cancelled_request", body);
+                    rideCancel();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
-                intent.putExtra("carColor", userCarColor);
-                intent.putExtra("carMake", userCarMake);
-                intent.putExtra("carModel", userCarModel);
-                intent.putExtra("Name", userName);
-                intent.putExtra("Password", userPassword);
-                intent.putExtra("Email", email);
-
-                startActivity(intent);
-
             }
         });
 
@@ -200,6 +212,7 @@ public class WaitingToMatch extends AppCompatActivity {
         email = extras.getString("Email");
         time1 = extras.getString("Time1");
         time_2 = extras.getString("Time2");
+        tkn = extras.getString("tkn");
         if (!time1.contains(":")){
             time1 = time1.substring(0,2) + ":" + time1.substring(2);
             time_2 = time_2.substring(0,2) + ":" + time_2.substring(2);
@@ -218,8 +231,7 @@ public class WaitingToMatch extends AppCompatActivity {
 
         createSocket();
 
-
-        realSocket.emit("get_lot_count");
+        mapSocket.emit("get_lot_count");
         if (extras.getString("NewRide").equals("1")){
             sendRequest(time1, time_2, pick_up, drop_off);
         }
@@ -243,15 +255,20 @@ public class WaitingToMatch extends AppCompatActivity {
         realSocket.on("get_rider_match", onNewMessage);
         realSocket.on("get_driver_match", onNewMessage);
         realSocket.on("send_cancelled_request", onCancelRequest);
-        realSocket.on("lot_count", onNewMessage1);
-        realSocket.on("first_state_count", onNewMessage1);
         realSocket.connect();
+        MapSocket mSocket = new MapSocket();
+        mapSocket = mSocket.getSocket();
+        mapSocket.on("lot_count", onNewMessage1);
+        mapSocket.on("first_state_count", onNewMessage1);
+        mapSocket.connect();
     }
 
     @Override
-    protected void onResume() {
+    protected void onRestart() {
         realSocket.connect();
-        super.onResume();
+        mapSocket.connect();
+        sendNewID();
+        super.onRestart();
     }
 
     private Emitter.Listener onNewMessage1 = new Emitter.Listener() {
@@ -281,9 +298,25 @@ public class WaitingToMatch extends AppCompatActivity {
         }
     };
 
+    private void sendNewID() {
+        final JSONObject sessionBody = new JSONObject();
+        try {
+            sessionBody.put("email", email);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    realSocket.emit("update_request_session_id", sessionBody);
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         realSocket.close();
+        mapSocket.close();
         super.onDestroy();
     }
 

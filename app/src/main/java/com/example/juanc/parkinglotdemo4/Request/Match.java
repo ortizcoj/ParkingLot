@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
+import com.example.juanc.parkinglotdemo4.MapSocket;
 import com.example.juanc.parkinglotdemo4.R;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
 import com.example.juanc.parkinglotdemo4.Sockets;
@@ -53,6 +54,7 @@ public class Match extends AppCompatActivity {
     private String time2;
     private String dropoff1;
     private String pick_up;
+    private Socket mapSocket;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -69,7 +71,7 @@ public class Match extends AppCompatActivity {
         }
     };
 
-    private boolean setUpMapMainUI() {
+    private boolean setUpRideMainUI() {
         mImageView.setVisibility(View.GONE);
         citationLot.setVisibility(View.GONE);
         name.setVisibility(View.VISIBLE);
@@ -129,8 +131,8 @@ public class Match extends AppCompatActivity {
         });
         return true;
     }
-
-    private boolean setUpRideMainUI() {
+    
+    private boolean setUpMapMainUI() {
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
         citationLot.setAlpha((float) 0.0);
@@ -321,9 +323,12 @@ public class Match extends AppCompatActivity {
         realSocket.on("match_cancelled", onMatchCancelled);
         realSocket.on("get_rider_match", onNewMessage);
         realSocket.on("get_driver_match", onNewMessage);
-        realSocket.on("lot_count", onNewMessage1);
-        realSocket.on("first_state_count", onNewMessage1);
         realSocket.connect();
+        MapSocket mSocket = new MapSocket();
+        mapSocket = mSocket.getSocket();
+        mapSocket.on("lot_count", onNewMessage1);
+        mapSocket.on("first_state_count", onNewMessage1);
+        mapSocket.connect();
     }
 
     @Override

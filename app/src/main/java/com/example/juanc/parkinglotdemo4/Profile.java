@@ -23,6 +23,11 @@ import com.example.juanc.parkinglotdemo4.Network.Networking;
 import com.example.juanc.parkinglotdemo4.Network.User;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
 import com.example.juanc.parkinglotdemo4.Security.Hashing;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Socket;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -47,6 +52,7 @@ public class Profile extends AppCompatActivity {
     private Button changePasswordButton;
     private Button logout;
     private String tkn = "";
+    private Socket realSocket;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -230,8 +236,7 @@ public class Profile extends AppCompatActivity {
         logout.setVisibility(View.GONE);
         mImageView.setVisibility(View.VISIBLE);
         citationLot.setVisibility(View.VISIBLE);
-        citationLot.setX(200);
-        citationLot.setY(850);
+        citationLot.setAlpha((float) 0.0);
         citationLot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -252,6 +257,7 @@ public class Profile extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mImageView = findViewById(R.id.map);
+        mImageView.setImageResource(R.drawable.map);
         mImageView.setVisibility(View.INVISIBLE);
         citationLot = findViewById(R.id.citation);
         citationLot.setVisibility(View.INVISIBLE);
@@ -302,7 +308,54 @@ public class Profile extends AppCompatActivity {
                 confirmUpdateMethod();
             }
         });
+
+        createSocket();
+
+        realSocket.emit("get_lot_count");
     }
+
+
+    private void createSocket(){
+        MapSocket socket = new MapSocket();
+        realSocket = socket.getSocket();
+        realSocket.on("lot_count", onNewMessage);
+        realSocket.on("first_state_count", onNewMessage);
+        realSocket.connect();
+    }
+
+    @Override
+    protected void onResume() {
+        realSocket.connect();
+        super.onResume();
+    }
+
+
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("Stuff", args[0]);
+                        int spot = (int) args[0];
+
+                        if (spot==186){
+                            mImageView.setImageResource(R.drawable.map186);
+                        } else if (spot==185){
+                            mImageView.setImageResource(R.drawable.map185);
+                        } else if (spot==184){
+                            mImageView.setImageResource(R.drawable.map184);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    };
 
     private void disableButtons() {
         emailField.setEnabled(false);

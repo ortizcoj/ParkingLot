@@ -27,6 +27,8 @@ import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+//TODO match being made but not shown to the one who is opening the map
+
 public class WaitingToMatch extends AppCompatActivity {
     private TextView requestText;
     private TextView time;
@@ -265,10 +267,18 @@ public class WaitingToMatch extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
+        super.onRestart();
         realSocket.connect();
         mapSocket.connect();
         sendNewID();
-        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        realSocket.connect();
+        mapSocket.connect();
+//        sendNewID();
     }
 
     private Emitter.Listener onNewMessage1 = new Emitter.Listener() {
@@ -302,12 +312,13 @@ public class WaitingToMatch extends AppCompatActivity {
         final JSONObject sessionBody = new JSONObject();
         try {
             sessionBody.put("email", email);
-            runOnUiThread(new Runnable() {
+            Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     realSocket.emit("update_request_session_id", sessionBody);
                 }
             });
+            thread.start();
         } catch (JSONException e) {
             e.printStackTrace();
         }

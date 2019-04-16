@@ -105,13 +105,16 @@ public class Menu extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) throws NullPointerException{
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null){
+        try {
             regUser = extras.getString("Registration");
             Toast.makeText(getApplicationContext(), regUser, Toast.LENGTH_LONG).show();
+        } catch (NullPointerException e){
+            Toast.makeText(getApplicationContext(), "Welcome!", Toast.LENGTH_LONG).show();
+
         }
         setContentView(R.layout.menu_layout);
 

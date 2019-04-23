@@ -22,6 +22,7 @@ import com.example.juanc.parkinglotdemo4.Map.LotDisplay;
 import com.example.juanc.parkinglotdemo4.Network.Networking;
 import com.example.juanc.parkinglotdemo4.Network.User;
 import com.example.juanc.parkinglotdemo4.RegisterLogin.Menu;
+import com.example.juanc.parkinglotdemo4.Request.RiderDriverRequest;
 import com.example.juanc.parkinglotdemo4.Security.Hashing;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
@@ -314,7 +315,6 @@ public class Profile extends AppCompatActivity {
         realSocket.emit("get_lot_count");
     }
 
-
     private void createSocket(){
         MapSocket socket = new MapSocket();
         realSocket = socket.getSocket();
@@ -363,5 +363,24 @@ public class Profile extends AppCompatActivity {
         brandET.setEnabled(false);
         modelET.setEnabled(false);
         colorET.setEnabled(false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), RiderDriverRequest.class);
+
+        Hashing security = new Hashing();
+        try {
+            intent.putExtra("carColor", colorET.getText().toString());
+            intent.putExtra("carMake", brandET.getText().toString());
+            intent.putExtra("carModel", modelET.getText().toString());
+            intent.putExtra("Name", nameET.getText().toString());
+            intent.putExtra("Password", security.hash(password));
+            intent.putExtra("Email", emailField.getText().toString());
+            intent.putExtra("token", tkn);
+            startActivity(intent);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 }

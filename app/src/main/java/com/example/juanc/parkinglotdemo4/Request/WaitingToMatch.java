@@ -27,8 +27,6 @@ import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-//TODO match being made but not shown to the one who is opening the map
-
 public class WaitingToMatch extends AppCompatActivity {
     private TextView requestText;
     private TextView time;

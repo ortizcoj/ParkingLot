@@ -85,10 +85,21 @@ public class Match extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(getApplicationContext(), Menu.class);
-                intent.putExtra("Registration", "Logged out");
-                startActivity(intent);
+                final JSONObject body = new JSONObject();
+                try {
+                    body.put("email", email);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            realSocket.emit("send_cancelled_match", body);
+                            Intent intent = new Intent(getApplicationContext(), Menu.class);
+                            intent.putExtra("Registration", "Logged out");
+                            startActivity(intent);
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         complete.setVisibility(View.VISIBLE);
@@ -200,10 +211,21 @@ public class Match extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(getApplicationContext(), Menu.class);
-                intent.putExtra("Registration", "Logged out");
-                startActivity(intent);
+                final JSONObject body = new JSONObject();
+                try {
+                    body.put("email", email);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            realSocket.emit("send_cancelled_match", body);
+                            Intent intent = new Intent(getApplicationContext(), Menu.class);
+                            intent.putExtra("Registration", "Logged out");
+                            startActivity(intent);
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
